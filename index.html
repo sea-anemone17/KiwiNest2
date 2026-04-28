@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./css/components.css" />
     <link rel="stylesheet" href="./css/nest.css" />
     <link rel="stylesheet" href="./css/diary.css" />
+    <link rel="stylesheet" href="./css/meta.css" />
     <link rel="stylesheet" href="./css/mobile.css" />
     <script type="module" src="./js/main.js"></script>
   </head>
@@ -16,20 +17,22 @@
     <div class="app-shell">
       <header class="app-header">
         <div>
-          <p class="eyebrow">KiwiNest 2.0 Alpha</p>
+          <p class="eyebrow">KiwiNest 2.0 Alpha v2</p>
           <h1>🥝 KiwiNest</h1>
-          <p class="subtitle">공부하고, 설명하고, 키위가 고마워하는 첫 번째 둥지예요.</p>
+          <p class="subtitle">공부하고, 설명하고, 메타인지로 내 공부 방식을 키우는 둥지예요.</p>
         </div>
       </header>
 
       <nav class="tab-nav" aria-label="주요 탭">
         <button class="tab-button is-active" type="button" data-tab-target="home">둥지 홈</button>
         <button class="tab-button" type="button" data-tab-target="diary">공부 일기장</button>
+        <button class="tab-button" type="button" data-tab-target="meta">메타인지</button>
       </nav>
 
       <main class="tab-container">
         <section id="home" class="tab-panel is-active" aria-label="둥지 홈"></section>
         <section id="diary" class="tab-panel" aria-label="공부 일기장"></section>
+        <section id="meta" class="tab-panel" aria-label="메타인지 실험실"></section>
       </main>
     </div>
 
