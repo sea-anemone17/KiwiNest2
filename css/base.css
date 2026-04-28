@@ -6,6 +6,8 @@
   --muted: #6e6e73;
   --line: rgba(0, 0, 0, 0.08);
 
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.06);
+
   --accent: #7c9f4a;
   --accent-strong: #4f7d2a;
   --danger: #d85b4a;
