@@ -55,7 +55,10 @@ function renderNewKiwiNotice() {
       <h3 class="card-title">새 키위 발견!</h3>
       <div class="unlock-row">
         ${variants.map((variant) => `
-          <span class="unlock-pill">${escapeHTML(variant.emoji)} ${escapeHTML(getKiwiDisplayName(variant, appState.kiwi.name))}</span>
+          <span class="unlock-pill">
+           <img src="${escapeHTML(variant.image)}" alt="${escapeHTML(variant.name)}" class="kiwi-mini-img">
+           ${escapeHTML(getKiwiDisplayName(variant, appState.kiwi.name))}
+          </span>
         `).join("")}
       </div>
       <p class="muted">해금된 키위는 대표 키위로 설정할 수 있어요.</p>
@@ -71,7 +74,13 @@ function renderKiwiCard(variant, unlockedIds, selectedId) {
   return `
     <article class="kiwi-card ${isUnlocked ? "" : "is-locked"} ${isSelected ? "is-selected" : ""}">
       <div class="kiwi-card-top">
-        <div class="kiwi-card-emoji">${escapeHTML(isUnlocked ? variant.emoji : "❔")}</div>
+        <div class="kiwi-card-visual">
+          ${
+           isUnlocked
+            ? `<img src="${escapeHTML(variant.image)}" alt="${escapeHTML(displayName)}" class="kiwi-card-img">`
+            : `<span class="kiwi-card-locked">❔</span>`
+          }
+        </div>
         <div>
           <h3>${escapeHTML(displayName)}</h3>
           <p class="rarity">${escapeHTML(getKiwiRarityLabel(variant.rarity))}</p>
