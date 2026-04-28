@@ -3,6 +3,7 @@ import {
   getRecentCalmLogs,
   getRecentDiaries,
   getRecentMetaSessions,
+  getReviewStats,
   getTodayCalmLogCount,
   getTodayDiaryCount,
   getTodayMetaSessionCount,
@@ -17,6 +18,7 @@ export function renderHome() {
   const recentDiaries = getRecentDiaries(3);
   const recentMetaSessions = getRecentMetaSessions(2);
   const recentCalmLogs = getRecentCalmLogs(2);
+  const reviewStats = getReviewStats();
   const kiwi = appState.kiwi;
   const todayRecordCount = getTodayDiaryCount() + getTodayMetaSessionCount() + getTodayCalmLogCount();
 
@@ -24,7 +26,7 @@ export function renderHome() {
     <div class="page-grid">
       <section class="card">
         <h2 class="card-title">${escapeHTML(kiwi.name)}의 둥지</h2>
-        <p class="muted">공부를 설명으로 바꾸고, 메타인지와 회복 기록으로 공부 방식을 관찰하면 ${escapeHTML(kiwi.name)}가 조금씩 강해져요.</p>
+        <p class="muted">공부를 설명으로 바꾸고, 메타인지·회복·복습 기록으로 공부 방식을 관찰하면 ${escapeHTML(kiwi.name)}가 조금씩 강해져요.</p>
 
         <div class="kiwi-stage" aria-label="키위새">
           <div>
@@ -41,6 +43,8 @@ export function renderHome() {
           <div class="stat"><span>친밀도</span><b>${kiwi.affection}</b></div>
           <div class="stat"><span>칭호 티켓</span><b>${kiwi.titleTickets}</b></div>
           <div class="stat"><span>오늘 기록</span><b>${todayRecordCount}</b></div>
+          <div class="stat"><span>오늘 복습</span><b>${reviewStats.due}</b></div>
+          <div class="stat"><span>완료 복습</span><b>${reviewStats.mastered}</b></div>
         </div>
 
         <form id="kiwiNameForm" class="form-grid" style="margin-top: 18px;">
@@ -52,6 +56,11 @@ export function renderHome() {
         </form>
       </aside>
     </div>
+
+    <section class="card">
+      <h3 class="card-title">복습 둥지 상태</h3>
+      ${renderReviewSummary(reviewStats)}
+    </section>
 
     <section class="card">
       <h3 class="card-title">최근 공부 일기</h3>
@@ -67,6 +76,21 @@ export function renderHome() {
       <h3 class="card-title">최근 마음 상태</h3>
       ${renderRecentCalmList(recentCalmLogs)}
     </section>
+  `;
+}
+
+function renderReviewSummary(stats) {
+  if (!stats.total) {
+    return `<div class="empty">아직 복습할 씨앗이 없어요. 공부 일기에 헷갈린 점을 남기면 자동으로 복습 둥지에 들어갑니다.</div>`;
+  }
+
+  return `
+    <div class="recent-list">
+      <article class="recent-item">
+        <h4>오늘 꺼낼 복습 ${stats.due}개</h4>
+        <p class="muted">예정 ${stats.upcoming}개 · 완료 ${stats.mastered}개 · 전체 ${stats.total}개</p>
+      </article>
+    </div>
   `;
 }
 
