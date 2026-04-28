@@ -168,3 +168,141 @@
     grid-template-columns: 1fr;
   }
 }
+
+.reward-panel {
+  margin: 18px 0;
+}
+
+.reward-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ticket-box {
+  min-width: 96px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+}
+
+.ticket-box span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.ticket-box b {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.45rem;
+}
+
+.equipped-title-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border-radius: 20px;
+  background: rgba(255, 249, 224, 0.82);
+}
+
+.title-grid,
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.title-card,
+.achievement-card,
+.letter-card {
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(105, 89, 43, 0.12);
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.title-card.is-locked,
+.achievement-card.is-locked,
+.letter-card.is-locked {
+  opacity: 0.62;
+}
+
+.title-card.is-equipped {
+  border-color: rgba(118, 151, 73, 0.55);
+  background: linear-gradient(135deg, rgba(246, 255, 233, 0.9), rgba(255, 249, 224, 0.88));
+}
+
+.title-card h4,
+.achievement-card h4,
+.letter-card h4 {
+  margin: 0 0 6px;
+}
+
+.title-card p,
+.achievement-card p,
+.letter-card p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.achievement-card {
+  display: flex;
+  gap: 10px;
+}
+
+.achievement-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: rgba(246, 241, 214, 0.78);
+  font-size: 1.3rem;
+}
+
+.letter-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.letter-card p {
+  margin-bottom: 0;
+}
+
+.mini-note {
+  margin: 12px 0 0;
+}
+
+@media (max-width: 920px) {
+  .title-grid,
+  .achievement-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .reward-panel-head {
+    flex-direction: column;
+  }
+
+  .ticket-box {
+    width: 100%;
+  }
+
+  .title-grid,
+  .achievement-grid {
+    grid-template-columns: 1fr;
+  }
+}
