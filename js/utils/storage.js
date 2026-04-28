@@ -1,21 +1,20 @@
-const PREFIX = "kiwinest:";
-
 export function readStorage(key, fallback) {
   try {
-    const raw = localStorage.getItem(`${PREFIX}${key}`);
-    return raw ? JSON.parse(raw) : fallback;
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    return JSON.parse(raw);
   } catch (error) {
-    console.warn("Failed to read localStorage:", error);
+    console.warn("localStorage read failed:", error);
     return fallback;
   }
 }
 
 export function writeStorage(key, value) {
   try {
-    localStorage.setItem(`${PREFIX}${key}`, JSON.stringify(value));
+    localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch (error) {
-    console.warn("Failed to write localStorage:", error);
+    console.warn("localStorage write failed:", error);
     return false;
   }
 }

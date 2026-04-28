@@ -3,7 +3,7 @@ export function qs(selector, root = document) {
 }
 
 export function qsa(selector, root = document) {
-  return [...root.querySelectorAll(selector)];
+  return Array.from(root.querySelectorAll(selector));
 }
 
 export function on(target, eventName, handler, options) {
