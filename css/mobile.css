@@ -1,1 +1,56 @@
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
 
+  .sidebar {
+    position: static;
+    height: auto;
+    padding: 18px;
+  }
+
+  .tab-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tab-button {
+    text-align: center;
+  }
+
+  .main-area {
+    padding: 20px;
+  }
+
+  .grid-2,
+  .nest-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header {
+    display: block;
+  }
+
+  .name-row {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 520px) {
+  .main-area {
+    padding: 14px;
+  }
+
+  .card {
+    padding: 17px;
+    border-radius: 22px;
+  }
+
+  .tab-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .kiwi-emoji {
+    width: 112px;
+    height: 112px;
+  }
+}

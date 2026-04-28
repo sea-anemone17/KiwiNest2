@@ -1,1 +1,86 @@
+.nest-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 18px;
+  align-items: stretch;
+}
 
+.kiwi-stage {
+  display: grid;
+  place-items: center;
+  min-height: 260px;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(239, 244, 220, 0.78)),
+    linear-gradient(135deg, rgba(217, 156, 59, 0.15), transparent);
+  border: 1px solid var(--line);
+}
+
+.kiwi-emoji {
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  border-radius: 52% 48% 56% 44%;
+  background: #7b5d39;
+  color: #f8eddc;
+  font-size: 58px;
+  box-shadow: inset -16px -18px 0 rgba(0, 0, 0, 0.12), 0 22px 34px rgba(80, 58, 24, 0.2);
+}
+
+.kiwi-dialogue {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.72);
+  line-height: 1.7;
+}
+
+.stat-list {
+  display: grid;
+  gap: 12px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.64);
+}
+
+.stat-item strong {
+  font-size: 1.12rem;
+}
+
+.name-row {
+  display: flex;
+  gap: 10px;
+}
+
+.name-row .input {
+  flex: 1;
+}
+
+.recent-list {
+  display: grid;
+  gap: 12px;
+}
+
+.recent-item {
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.recent-item h4 {
+  margin: 0 0 6px;
+}
+
+.recent-item p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
