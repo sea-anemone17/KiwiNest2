@@ -1,24 +1,30 @@
 import {
   appState,
+  getRecentCalmLogs,
   getRecentDiaries,
   getRecentMetaSessions,
+  getTodayCalmLogCount,
   getTodayDiaryCount,
   getTodayMetaSessionCount,
 } from "../../state.js";
 import { escapeHTML } from "../../utils/sanitize.js";
 import { formatDateTime } from "../../utils/date.js";
 import { getSubjectName } from "../../data/subjects.js";
+import { getMoodEmoji, getMoodName } from "../../data/moods.js";
+import { getSituationEmoji, getSituationName } from "../../data/situations.js";
 
 export function renderHome() {
   const recentDiaries = getRecentDiaries(3);
   const recentMetaSessions = getRecentMetaSessions(2);
+  const recentCalmLogs = getRecentCalmLogs(2);
   const kiwi = appState.kiwi;
+  const todayRecordCount = getTodayDiaryCount() + getTodayMetaSessionCount() + getTodayCalmLogCount();
 
   return `
     <div class="page-grid">
       <section class="card">
         <h2 class="card-title">${escapeHTML(kiwi.name)}의 둥지</h2>
-        <p class="muted">공부를 설명으로 바꾸고, 메타인지로 공부 방식을 관찰하면 ${escapeHTML(kiwi.name)}가 조금씩 강해져요.</p>
+        <p class="muted">공부를 설명으로 바꾸고, 메타인지와 회복 기록으로 공부 방식을 관찰하면 ${escapeHTML(kiwi.name)}가 조금씩 강해져요.</p>
 
         <div class="kiwi-stage" aria-label="키위새">
           <div>
@@ -34,7 +40,7 @@ export function renderHome() {
           <div class="stat"><span>EXP</span><b>${kiwi.exp}</b></div>
           <div class="stat"><span>친밀도</span><b>${kiwi.affection}</b></div>
           <div class="stat"><span>칭호 티켓</span><b>${kiwi.titleTickets}</b></div>
-          <div class="stat"><span>오늘 기록</span><b>${getTodayDiaryCount() + getTodayMetaSessionCount()}</b></div>
+          <div class="stat"><span>오늘 기록</span><b>${todayRecordCount}</b></div>
         </div>
 
         <form id="kiwiNameForm" class="form-grid" style="margin-top: 18px;">
@@ -55,6 +61,11 @@ export function renderHome() {
     <section class="card">
       <h3 class="card-title">최근 메타인지 기록</h3>
       ${renderRecentMetaList(recentMetaSessions)}
+    </section>
+
+    <section class="card">
+      <h3 class="card-title">최근 마음 상태</h3>
+      ${renderRecentCalmList(recentCalmLogs)}
     </section>
   `;
 }
@@ -87,6 +98,23 @@ function renderRecentMetaList(sessions) {
         <article class="recent-item">
           <h4>${escapeHTML(session.goal)}</h4>
           <p class="muted">${escapeHTML(formatDateTime(session.createdAt))} · 실제 ${Number(session.actualMinutes) || 0}분 · 집중 ${Number(session.actualFocus) || 0}/5</p>
+        </article>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderRecentCalmList(logs) {
+  if (!logs.length) {
+    return `<div class="empty">아직 마음 기록이 없어요. 공부하지 못한 날에도 둥지는 열려 있어요.</div>`;
+  }
+
+  return `
+    <div class="recent-list">
+      ${logs.map((log) => `
+        <article class="recent-item">
+          <h4>${escapeHTML(getSituationEmoji(log.situation))} ${escapeHTML(getSituationName(log.situation))}</h4>
+          <p class="muted">${escapeHTML(getMoodEmoji(log.mood))} ${escapeHTML(getMoodName(log.mood))} · ${escapeHTML(formatDateTime(log.createdAt))}</p>
         </article>
       `).join("")}
     </div>
