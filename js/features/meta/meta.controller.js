@@ -73,6 +73,7 @@ function bindMetaForm(renderApp) {
 
     const session = {
       goal: input.goal,
+      studyType: input.studyType,
       goalMinutes: input.goalMinutes,
       actualMinutes: input.actualMinutes,
       expectedDifficulty: input.expectedDifficulty,
@@ -80,9 +81,10 @@ function bindMetaForm(renderApp) {
       expectedFocus: input.expectedFocus,
       actualFocus: input.actualFocus,
       completedGoal: input.completedGoal,
+      blockReason: input.blockReason,
       reflection: input.reflection,
-      timerSeconds: getTimerSeconds(),
       analysis,
+      nextStrategy,
       reward,
     };
 
