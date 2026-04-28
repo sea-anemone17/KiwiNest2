@@ -19,6 +19,18 @@ export function renderMeta() {
             <input class="input" id="metaGoal" maxlength="80" placeholder="예: 영어 어법 20문장 분석" />
           </label>
 
+          <label class="field">
+            <span class="label">공부 타입</span>
+            <select class="select" id="metaStudyType">
+              <option value="concept">개념 이해</option>
+              <option value="memorize">암기</option>
+              <option value="problem">문제풀이</option>
+              <option value="wrong">오답 분석</option>
+              <option value="review">복습</option>
+              <option value="exam">시험 대비</option>
+            </select>
+          </label>
+
           <div class="meta-mini-grid">
             <label class="field">
               <span class="label">목표 시간(분)</span>
@@ -43,6 +55,20 @@ export function renderMeta() {
             <select class="select" id="metaCompletedGoal">
               <option value="true">달성했어요</option>
               <option value="false">아직 덜 했어요</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="label">막힌 이유</span>
+            <select class="select" id="metaBlockReason">
+              <option value="">없음 / 잘 진행됨</option>
+              <option value="sleepy">졸림</option>
+              <option value="too_big">목표가 너무 컸음</option>
+              <option value="hard_concept">개념이 어려웠음</option>
+              <option value="late_start">시작이 늦었음</option>
+              <option value="environment">환경 문제</option>
+              <option value="distraction">딴짓/산만함</option>
+              <option value="emotion">감정 문제</option>
             </select>
           </label>
 
@@ -110,6 +136,7 @@ function renderMetaItem(session) {
       <h3>${escapeHTML(session.goal)}</h3>
       <p class="muted">${escapeHTML(formatDateTime(session.createdAt))} · ${escapeHTML(completed)}</p>
       <div class="meta-tags">
+        <span class="meta-tag">${escapeHTML(getStudyTypeLabel(session.studyType))}</span>
         <span class="meta-tag">목표 ${Number(session.goalMinutes) || 0}분</span>
         <span class="meta-tag">실제 ${Number(session.actualMinutes) || 0}분</span>
         <span class="meta-tag">집중 ${Number(session.actualFocus) || 0}/5</span>
@@ -119,8 +146,25 @@ function renderMetaItem(session) {
         <b>키위의 관찰</b>
         <p>${escapeHTML(analysis.focusLabel ?? "집중도 기록을 저장했어요.")} · ${escapeHTML(analysis.difficultyLabel ?? "난이도 기록을 저장했어요.")}</p>
       </div>
+      <div class="meta-result">
+        <b>다음 전략</b>
+        <p>${escapeHTML(session.nextStrategy ?? "다음 공부에서 다시 관찰해 볼 전략을 아직 만들지 않았어요.")}</p>
+      </div>
       ${session.reflection ? `<p>${escapeHTML(session.reflection)}</p>` : ""}
       <div class="reward-line">EXP +${reward.exp} · 친밀도 +${reward.affection}${reward.titleTickets ? ` · 칭호 티켓 +${reward.titleTickets}` : ""}</div>
     </article>
   `;
+}
+
+function getStudyTypeLabel(type) {
+  const labels = {
+    concept: "개념 이해",
+    memorize: "암기",
+    problem: "문제풀이",
+    wrong: "오답 분석",
+    review: "복습",
+    exam: "시험 대비",
+  };
+
+  return labels[type] ?? "공부 기록";
 }
