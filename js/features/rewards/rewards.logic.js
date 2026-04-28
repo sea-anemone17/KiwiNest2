@@ -1,35 +1,43 @@
 export function calculateDiaryReward({ explanation, confusedPoint, understanding }) {
-  const explanationLength = explanation.length;
-  const baseExp = 10;
-  const explanationBonus = getExplanationBonus(explanationLength);
-  const confusedBonus = confusedPoint ? 4 : 0;
-  const understandingBonus = Number(understanding) >= 4 ? 6 : Number(understanding) >= 3 ? 3 : 0;
-  const affection = 2 + (explanationLength >= 200 ? 2 : 0) + (confusedPoint ? 1 : 0);
-  const titleTickets = explanationLength >= 350 ? 1 : 0;
+  const explanationLength = String(explanation ?? "").trim().length;
+  const hasConfusedPoint = String(confusedPoint ?? "").trim().length > 0;
+  const understandingScore = Number(understanding);
 
-  return {
-    exp: baseExp + explanationBonus + confusedBonus + understandingBonus,
-    affection,
-    titleTickets,
-  };
-}
+  let exp = 10;
+  let affection = 2;
+  let titleTickets = 0;
 
-export function buildKiwiThanksMessage(kiwiName, reward, explanationLength) {
+  if (explanationLength >= 80) exp += 8;
+  if (explanationLength >= 180) {
+    exp += 10;
+    affection += 2;
+  }
   if (explanationLength >= 350) {
-    return `${kiwiName}가 반짝이는 눈으로 고개를 끄덕였어요. “자세히 설명해 줘서 고마워요. 저도 조금 더 똑똑해진 것 같아요!”`;
+    exp += 15;
+    affection += 3;
+    titleTickets += 1;
+  }
+  if (hasConfusedPoint) {
+    exp += 5;
+    affection += 2;
+  }
+  if (understandingScore >= 3) exp += 5;
+  if (understandingScore >= 4) {
+    exp += 8;
+    affection += 2;
   }
 
-  if (explanationLength >= 140) {
-    return `${kiwiName}가 작은 발로 노트를 꾹 눌렀어요. “이해했어요. 이렇게 설명해 주니까 기억에 오래 남을 것 같아요!”`;
-  }
-
-  return `${kiwiName}가 고개를 갸웃하다가 웃었어요. “고마워요. 다음엔 조금만 더 자세히 알려 주세요!”`;
+  return { exp, affection, titleTickets };
 }
 
-function getExplanationBonus(length) {
-  if (length >= 350) return 18;
-  if (length >= 220) return 14;
-  if (length >= 120) return 9;
-  if (length >= 40) return 5;
-  return 0;
+export function createKiwiThanksMessage(kiwiName, reward) {
+  if (reward.titleTickets > 0) {
+    return `${kiwiName}가 반짝이는 눈으로 설명을 들었어요.\n“이건 정말 잘 배웠어요. 고마워요!”`;
+  }
+
+  if (reward.exp >= 25) {
+    return `${kiwiName}가 고개를 끄덕여요.\n“설명이 길고 친절해서 저도 이해한 것 같아요!”`;
+  }
+
+  return `${kiwiName}가 작은 발로 노트를 꾹 눌러요.\n“오늘도 알려 줘서 고마워요.”`;
 }
