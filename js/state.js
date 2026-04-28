@@ -44,6 +44,7 @@ const DEFAULT_STATE = {
   metaSessions: [],
   calmLogs: [],
   reviewQueue: [],
+  customSubjects: [],
   lastMessage: "둥지에 온 걸 환영해요.\n오늘은 무엇을 가르쳐 줄 건가요?",
 };
 
@@ -292,6 +293,23 @@ export function getTodayCalmLogCount() {
   return appState.calmLogs.filter((log) => getTodayKey(log.createdAt) === today).length;
 }
 
+export function addCustomSubject(name) {
+  const cleaned = String(name ?? "").trim().slice(0, 20);
+  if (!cleaned) return null;
+
+  const id = `custom_${Date.now()}`;
+
+  const subject = {
+    id,
+    name: cleaned,
+    custom: true,
+  };
+
+  appState.customSubjects.unshift(subject);
+  saveState();
+  return subject;
+}
+
 function syncProgressUnlocks({ announce = false } = {}) {
   ensureKiwiDex();
   ensureTitleState();
@@ -366,6 +384,7 @@ function migrateState(saved) {
   next.metaSessions = Array.isArray(saved.metaSessions) ? saved.metaSessions : [];
   next.calmLogs = Array.isArray(saved.calmLogs) ? saved.calmLogs : [];
   next.reviewQueue = Array.isArray(saved.reviewQueue) ? saved.reviewQueue : [];
+  next.customSubjects = Array.isArray(saved.customSubjects) ? saved.customSubjects : [];
   next.lastMessage = typeof saved.lastMessage === "string" ? saved.lastMessage : next.lastMessage;
   return next;
 }
