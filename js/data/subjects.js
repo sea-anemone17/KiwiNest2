@@ -1,4 +1,4 @@
-export const SUBJECTS = [
+export const DEFAULT_SUBJECTS = [
   { id: "korean", name: "국어" },
   { id: "english", name: "영어" },
   { id: "math", name: "수학" },
@@ -9,6 +9,10 @@ export const SUBJECTS = [
   { id: "etc", name: "기타" },
 ];
 
-export function getSubjectName(id) {
-  return SUBJECTS.find((subject) => subject.id === id)?.name ?? "기타";
+export function getAllSubjects(customSubjects = []) {
+  return [...DEFAULT_SUBJECTS, ...customSubjects];
+}
+
+export function getSubjectName(id, customSubjects = []) {
+  return getAllSubjects(customSubjects).find((subject) => subject.id === id)?.name ?? "기타";
 }
