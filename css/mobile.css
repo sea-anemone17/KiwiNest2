@@ -1,12 +1,79 @@
 @media (max-width: 780px) {
-  .app-shell { width: min(100% - 20px, 1120px); padding-top: 16px; }
-  .app-header, .card { padding: 18px; border-radius: 22px; }
-  .page-grid, .meta-layout { grid-template-columns: 1fr; }
-  .stat-grid, .meta-mini-grid { grid-template-columns: repeat(2, 1fr); }
-  .tab-nav { border-radius: 22px; flex-direction: column; }
+  .app-shell {
+    width: min(calc(100% - 20px), 1120px);
+    padding-top: 18px;
+    padding-bottom: 32px;
+  }
+
+  .app-header,
+  .card {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .page-grid,
+  .meta-layout,
+  .calm-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-grid,
+  .meta-mini-grid,
+  .calm-mini-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tab-nav {
+    border-radius: 24px;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .tab-button {
+    width: 100%;
+  }
+
+  .kiwi-dex-grid,
+  .title-grid,
+  .achievement-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-kiwi-img {
+    width: 130px;
+    height: 130px;
+  }
 }
 
 @media (max-width: 520px) {
-  .stat-grid, .meta-mini-grid { grid-template-columns: 1fr; }
-  .timer-display { font-size: 3.2rem; }
+  .stat-grid,
+  .meta-mini-grid,
+  .calm-mini-grid,
+  .kiwi-dex-grid,
+  .title-grid,
+  .achievement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timer-display {
+    font-size: 3.2rem;
+  }
+
+  .home-kiwi-img {
+    width: 110px;
+    height: 110px;
+  }
+
+  .kiwi-card-img {
+    width: 64px;
+    height: 64px;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
+  .app-header {
+    gap: 18px;
+  }
 }
