@@ -1,36 +1,37 @@
-import { qs, showToast } from "../../utils/dom.js";
-import { normalizeText } from "../../utils/sanitize.js";
+import { qs, on, showToast } from "../../utils/dom.js";
 import { addDiary, appState, applyReward } from "../../state.js";
-import { buildDiaryEntry, validateDiaryInput } from "./diary.logic.js";
+import { buildDiaryPayload, validateDiaryInput } from "./diary.logic.js";
 
 export function bindDiaryEvents(renderApp) {
   const form = qs("#diaryForm");
-  if (!form) return;
 
-  form.addEventListener("submit", (event) => {
+  on(form, "submit", (event) => {
     event.preventDefault();
 
-    const formData = new FormData(form);
-    const input = {
-      subject: normalizeText(formData.get("subject"), 40) || "etc",
-      title: normalizeText(formData.get("title"), 80),
-      content: normalizeText(formData.get("content"), 1500),
-      explanation: normalizeText(formData.get("explanation"), 6000),
-      confusedPoint: normalizeText(formData.get("confusedPoint"), 1500),
-      understanding: Number(formData.get("understanding") || 3),
-    };
+    const input = collectDiaryInput();
+    const errors = validateDiaryInput(input);
 
-    const errorMessage = validateDiaryInput(input);
-    if (errorMessage) {
-      showToast(errorMessage);
+    if (errors.length) {
+      showToast(errors[0]);
       return;
     }
 
-    const { diary, reward } = buildDiaryEntry(input, appState.kiwi.name);
+    const { diary, reward } = buildDiaryPayload(input, appState.kiwi.name);
     addDiary(diary);
     applyReward(reward);
-    form.reset();
+
+    showToast(`공부 일기를 저장했어요. EXP +${reward.exp} 🥝`);
     renderApp();
-    showToast(`저장 완료! EXP +${reward.exp}, 친밀도 +${reward.affection}`);
   });
+}
+
+function collectDiaryInput() {
+  return {
+    subject: qs("#diarySubject")?.value ?? "etc",
+    title: qs("#diaryTitle")?.value ?? "",
+    content: qs("#diaryContent")?.value ?? "",
+    explanation: qs("#diaryExplanation")?.value ?? "",
+    confusedPoint: qs("#diaryConfused")?.value ?? "",
+    understanding: qs("#diaryUnderstanding")?.value ?? "3",
+  };
 }
