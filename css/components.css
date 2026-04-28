@@ -1,4 +1,11 @@
-.card { border: 1px solid var(--line); border-radius: var(--radius-lg); background: rgba(255, 253, 247, 0.92); box-shadow: var(--shadow); padding: 22px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
 .card + .card { margin-top: 18px; }
 .card-title { margin: 0 0 10px; font-size: 1.25rem; }
 .muted { color: var(--muted); }
