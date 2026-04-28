@@ -349,3 +349,11 @@
   object-fit: contain;
   display: block;
 }
+
+.kiwi-stage img {
+  width: 160px !important;
+  height: 160px !important;
+  max-width: 160px !important;
+  max-height: 160px !important;
+  object-fit: contain;
+}
