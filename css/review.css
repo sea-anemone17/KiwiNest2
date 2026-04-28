@@ -5,6 +5,10 @@
   align-items: center;
 }
 
+.review-hero > div {
+  min-width: 0;
+}
+
 .review-counts {
   display: grid;
   grid-template-columns: repeat(3, minmax(76px, 1fr));
