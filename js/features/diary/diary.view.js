@@ -1,5 +1,5 @@
 import { appState } from "../../state.js";
-import { SUBJECTS, getSubjectName } from "../../data/subjects.js";
+import { getAllSubjects, getSubjectName } from "../../data/subjects.js";
 import { escapeHTML } from "../../utils/sanitize.js";
 import { formatDateTime } from "../../utils/date.js";
 
