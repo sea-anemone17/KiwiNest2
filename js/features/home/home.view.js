@@ -1,7 +1,10 @@
 import {
   appState,
+  getEquippedTitle,
+  getRecentAchievements,
   getRecentCalmLogs,
   getRecentDiaries,
+  getRecentLetters,
   getRecentMetaSessions,
   getReviewStats,
   getSelectedKiwiVariant,
@@ -15,29 +18,36 @@ import { getSubjectName } from "../../data/subjects.js";
 import { getMoodEmoji, getMoodName } from "../../data/moods.js";
 import { getSituationEmoji, getSituationName } from "../../data/situations.js";
 import { KIWI_VARIANTS } from "../../data/kiwiVariants.js";
+import { ACHIEVEMENTS } from "../../data/achievements.js";
+import { LETTERS } from "../../data/letters.js";
 import { getKiwiDisplayName } from "../kiwi/kiwi.naming.js";
 
 export function renderHome() {
   const recentDiaries = getRecentDiaries(3);
   const recentMetaSessions = getRecentMetaSessions(2);
   const recentCalmLogs = getRecentCalmLogs(2);
+  const recentAchievements = getRecentAchievements(3);
+  const recentLetters = getRecentLetters(2);
   const reviewStats = getReviewStats();
   const kiwi = appState.kiwi;
   const selectedVariant = getSelectedKiwiVariant();
+  const equippedTitle = getEquippedTitle();
   const selectedKiwiName = getKiwiDisplayName(selectedVariant, kiwi.name);
   const todayRecordCount = getTodayDiaryCount() + getTodayMetaSessionCount() + getTodayCalmLogCount();
   const unlockedCount = appState.kiwiDex?.unlockedVariantIds?.length ?? 1;
+  const achievementCount = appState.achievements?.unlockedIds?.length ?? 0;
+  const letterCount = appState.letters?.unlockedIds?.length ?? 0;
 
   return `
     <div class="page-grid">
       <section class="card">
-        <h2 class="card-title">${escapeHTML(selectedKiwiName)}의 둥지</h2>
-        <p class="muted">공부를 설명으로 바꾸고, 메타인지·회복·복습 기록으로 공부 방식을 관찰하면 ${escapeHTML(kiwi.name)}의 다양한 모습이 해금돼요.</p>
+        <h2 class="card-title">[${escapeHTML(equippedTitle.name)}] ${escapeHTML(selectedKiwiName)}의 둥지</h2>
+        <p class="muted">공부를 설명으로 바꾸고, 메타인지·회복·복습·수집·업적 보상으로 공부 방식을 키워요.</p>
 
         <div class="kiwi-stage" aria-label="키위새">
           <div>
             <div class="kiwi-bird">${escapeHTML(selectedVariant.emoji)}<span class="kiwi-face">•ө•</span></div>
-            <p class="kiwi-variant-name">${escapeHTML(selectedKiwiName)}</p>
+            <p class="kiwi-variant-name">[${escapeHTML(equippedTitle.name)}] ${escapeHTML(selectedKiwiName)}</p>
             <p class="kiwi-message">${escapeHTML(appState.lastMessage)}</p>
           </div>
         </div>
@@ -52,6 +62,8 @@ export function renderHome() {
           <div class="stat"><span>오늘 기록</span><b>${todayRecordCount}</b></div>
           <div class="stat"><span>오늘 복습</span><b>${reviewStats.due}</b></div>
           <div class="stat"><span>키위 도감</span><b>${unlockedCount}/${KIWI_VARIANTS.length}</b></div>
+          <div class="stat"><span>업적</span><b>${achievementCount}/${ACHIEVEMENTS.length}</b></div>
+          <div class="stat"><span>편지</span><b>${letterCount}/${LETTERS.length}</b></div>
         </div>
 
         <form id="kiwiNameForm" class="form-grid" style="margin-top: 18px;">
@@ -65,6 +77,7 @@ export function renderHome() {
     </div>
 
     ${renderNewKiwiNotice()}
+    ${renderRecentRewardNotice(recentAchievements, recentLetters)}
 
     <section class="card">
       <h3 class="card-title">복습 둥지 상태</h3>
@@ -100,6 +113,19 @@ function renderNewKiwiNotice() {
       <h3 class="card-title">${escapeHTML(variant.emoji)} 새 키위 발견!</h3>
       <p><b>${escapeHTML(getKiwiDisplayName(variant, appState.kiwi.name))}</b>가 둥지에 찾아왔어요.</p>
       <p class="muted">키위 도감 탭에서 대표 키위로 설정할 수 있어요.</p>
+    </section>
+  `;
+}
+
+function renderRecentRewardNotice(achievements, letters) {
+  if (!achievements.length && !letters.length) return "";
+
+  return `
+    <section class="card new-kiwi-notice">
+      <h3 class="card-title">새 보상 기록</h3>
+      ${achievements.length ? `<p><b>최근 업적:</b> ${achievements.map((item) => `${escapeHTML(item.emoji)} ${escapeHTML(item.name)}`).join(" · ")}</p>` : ""}
+      ${letters.length ? `<p><b>최근 편지:</b> ${letters.map((item) => escapeHTML(item.title)).join(" · ")}</p>` : ""}
+      <p class="muted">자세한 내용은 키위 도감 탭의 업적/편지 영역에서 볼 수 있어요.</p>
     </section>
   `;
 }
