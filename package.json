@@ -1,0 +1,11 @@
+{
+  "name": "kiwinest-2-alpha",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx serve .",
+    "format": "npx prettier --write ."
+  },
+  "devDependencies": {}
+}

@@ -1,1 +1,43 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KiwiNest 2.0 Alpha</title>
+    <link rel="stylesheet" href="./css/base.css" />
+    <link rel="stylesheet" href="./css/layout.css" />
+    <link rel="stylesheet" href="./css/components.css" />
+    <link rel="stylesheet" href="./css/nest.css" />
+    <link rel="stylesheet" href="./css/diary.css" />
+    <link rel="stylesheet" href="./css/mobile.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="KiwiNest navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">🥝</div>
+          <div>
+            <h1>KiwiNest</h1>
+            <p>2.0 Alpha</p>
+          </div>
+        </div>
 
+        <nav class="tab-nav" aria-label="주요 탭">
+          <button class="tab-button is-active" data-tab-target="home" type="button">둥지 홈</button>
+          <button class="tab-button" data-tab-target="diary" type="button">공부 일기장</button>
+        </nav>
+
+        <p class="sidebar-note">공부하고, 설명하고, 키위가 고마워하는 첫 번째 루프예요.</p>
+      </aside>
+
+      <main class="main-area">
+        <section id="home" class="tab-panel is-active" aria-labelledby="home-title"></section>
+        <section id="diary" class="tab-panel" aria-labelledby="diary-title"></section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
