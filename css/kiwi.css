@@ -1,1 +1,170 @@
+.kiwi-dex-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
 
+.dex-progress {
+  min-width: 112px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.68);
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+}
+
+.dex-progress b {
+  font-size: 2rem;
+}
+
+.dex-progress span,
+.dex-progress p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.unlock-card {
+  border: 1px solid rgba(135, 115, 55, 0.24);
+  background: linear-gradient(135deg, rgba(255, 251, 219, 0.86), rgba(232, 255, 230, 0.72));
+}
+
+.unlock-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.unlock-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  font-weight: 700;
+}
+
+.kiwi-dex-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.kiwi-card {
+  padding: 18px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(105, 89, 43, 0.12);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.16s ease, border-color 0.16s ease, opacity 0.16s ease;
+}
+
+.kiwi-card:hover {
+  transform: translateY(-2px);
+}
+
+.kiwi-card.is-locked {
+  opacity: 0.62;
+  filter: grayscale(0.2);
+}
+
+.kiwi-card.is-selected {
+  border-color: rgba(118, 151, 73, 0.55);
+  box-shadow: 0 14px 30px rgba(93, 116, 63, 0.14);
+}
+
+.kiwi-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.kiwi-card-emoji {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: rgba(246, 241, 214, 0.78);
+  font-size: 1.8rem;
+}
+
+.kiwi-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.rarity {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.kiwi-card-desc {
+  min-height: 48px;
+  margin: 0 0 12px;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.kiwi-condition {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.kiwi-card-actions {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.button-small {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+
+.muted-badge {
+  background: rgba(164, 164, 164, 0.16);
+  color: var(--muted);
+}
+
+.selected-badge {
+  background: rgba(161, 204, 104, 0.2);
+  color: #4b6934;
+}
+
+.kiwi-variant-name {
+  margin: 8px 0 0;
+  font-weight: 800;
+  text-align: center;
+}
+
+.kiwi-face {
+  margin-left: 6px;
+}
+
+.new-kiwi-notice {
+  border: 1px solid rgba(118, 151, 73, 0.32);
+  background: linear-gradient(135deg, rgba(246, 255, 233, 0.9), rgba(255, 249, 224, 0.9));
+}
+
+@media (max-width: 920px) {
+  .kiwi-dex-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .kiwi-dex-hero {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .kiwi-dex-grid {
+    grid-template-columns: 1fr;
+  }
+}
