@@ -116,3 +116,31 @@ export function calculateCalmReward({ note, mood }) {
 
   return { exp, affection, titleTickets };
 }
+
+export function calculateReviewReward(result) {
+  if (result === "remembered") {
+    return { exp: 16, affection: 3, titleTickets: 0 };
+  }
+
+  if (result === "shaky") {
+    return { exp: 10, affection: 2, titleTickets: 0 };
+  }
+
+  return { exp: 7, affection: 2, titleTickets: 0 };
+}
+
+export function createKiwiReviewMessage(kiwiName, result, updatedItem) {
+  if (updatedItem?.status === "mastered") {
+    return `${kiwiName}가 복습 노트를 꼭 안았어요.\n“이건 이제 둥지 깊은 곳에 잘 자리 잡았어요!”`;
+  }
+
+  if (result === "remembered") {
+    return `${kiwiName}가 작은 발로 동그라미를 그려요.\n“기억해냈네요! 다음엔 조금 더 멀리서 다시 만나요.”`;
+  }
+
+  if (result === "shaky") {
+    return `${kiwiName}가 고개를 갸웃하다가 끄덕여요.\n“애매한 걸 알아낸 것도 복습이에요. 내일 다시 같이 볼게요.”`;
+  }
+
+  return `${kiwiName}가 노트를 조용히 다시 펼쳐요.\n“괜찮아요. 모른다는 걸 발견했으니까, 이제 다시 붙잡을 수 있어요.”`;
+}
