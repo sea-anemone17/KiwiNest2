@@ -1,7 +1,12 @@
 @media (max-width: 780px) {
   .app-shell { width: min(100% - 20px, 1120px); padding-top: 16px; }
   .app-header, .card { padding: 18px; border-radius: 22px; }
-  .page-grid { grid-template-columns: 1fr; }
-  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-grid, .meta-layout { grid-template-columns: 1fr; }
+  .stat-grid, .meta-mini-grid { grid-template-columns: repeat(2, 1fr); }
   .tab-nav { border-radius: 22px; flex-direction: column; }
+}
+
+@media (max-width: 520px) {
+  .stat-grid, .meta-mini-grid { grid-template-columns: 1fr; }
+  .timer-display { font-size: 3.2rem; }
 }
