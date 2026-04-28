@@ -1,0 +1,138 @@
+.review-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.review-counts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(72px, 1fr));
+  gap: 10px;
+}
+
+.review-count {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.72);
+  text-align: center;
+}
+
+.review-count span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-bottom: 4px;
+}
+
+.review-count b {
+  font-size: 1.35rem;
+}
+
+.review-list {
+  display: grid;
+  gap: 14px;
+}
+
+.review-list.compact {
+  gap: 10px;
+}
+
+.review-item {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: var(--shadow-soft);
+}
+
+.review-item.is-due {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(236, 255, 226, 0.78));
+}
+
+.review-item.mastered {
+  opacity: 0.86;
+}
+
+.review-item-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.review-item h4 {
+  margin: 3px 0 0;
+  font-size: 1.05rem;
+}
+
+.review-badge {
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.review-date {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.review-prompt {
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.7);
+  margin: 12px 0;
+}
+
+.review-prompt b {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.review-prompt p,
+.review-details p {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.65;
+}
+
+.review-details {
+  margin: 10px 0 14px;
+  color: var(--text);
+}
+
+.review-details summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .review-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .review-counts {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .review-item-head {
+    display: block;
+  }
+
+  .review-date {
+    display: inline-block;
+    margin-top: 6px;
+  }
+}
