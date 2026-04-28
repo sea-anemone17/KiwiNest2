@@ -68,6 +68,7 @@ function bindMetaForm(renderApp) {
     }
 
     const analysis = analyzeMetaSession(input);
+    const nextStrategy = suggestNextStrategy(input, analysis);
     const reward = calculateMetaReward(input);
     const message = createKiwiMetaMessage(appState.kiwi.name, reward, analysis);
 
