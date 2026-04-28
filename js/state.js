@@ -5,7 +5,7 @@ import { getTodayKey } from "./utils/date.js";
 const STORAGE_KEY = "kiwinest-alpha-state-v1";
 
 const DEFAULT_STATE = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   kiwi: {
     name: "위키",
     exp: 0,
@@ -13,6 +13,7 @@ const DEFAULT_STATE = {
     titleTickets: 0,
   },
   diaries: [],
+  metaSessions: [],
   lastMessage: "둥지에 온 걸 환영해요.\n오늘은 무엇을 가르쳐 줄 건가요?",
 };
 
@@ -65,8 +66,24 @@ export function addDiary(diary) {
   return fullDiary;
 }
 
+export function addMetaSession(session) {
+  const fullSession = {
+    id: createId("meta"),
+    createdAt: new Date().toISOString(),
+    ...session,
+  };
+
+  appState.metaSessions.unshift(fullSession);
+  saveState();
+  return fullSession;
+}
+
 export function getRecentDiaries(limit = 3) {
   return appState.diaries.slice(0, limit);
+}
+
+export function getRecentMetaSessions(limit = 3) {
+  return appState.metaSessions.slice(0, limit);
 }
 
 export function getTodayDiaryCount() {
@@ -74,16 +91,22 @@ export function getTodayDiaryCount() {
   return appState.diaries.filter((diary) => getTodayKey(diary.createdAt) === today).length;
 }
 
+export function getTodayMetaSessionCount() {
+  const today = getTodayKey();
+  return appState.metaSessions.filter((session) => getTodayKey(session.createdAt) === today).length;
+}
+
 function migrateState(saved) {
   if (!saved || typeof saved !== "object") return createDefaultState();
 
   const next = createDefaultState();
-  next.schemaVersion = 1;
+  next.schemaVersion = 2;
   next.kiwi = {
     ...next.kiwi,
     ...(saved.kiwi && typeof saved.kiwi === "object" ? saved.kiwi : {}),
   };
   next.diaries = Array.isArray(saved.diaries) ? saved.diaries : [];
+  next.metaSessions = Array.isArray(saved.metaSessions) ? saved.metaSessions : [];
   next.lastMessage = typeof saved.lastMessage === "string" ? saved.lastMessage : next.lastMessage;
   return next;
 }
