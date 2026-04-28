@@ -357,3 +357,82 @@
   max-height: 160px !important;
   object-fit: contain;
 }
+
+.kiwi-dex-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.dex-progress,
+.ticket-box {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+}
+
+.unlock-card,
+.new-kiwi-notice {
+  border: 1px solid rgba(124, 159, 74, 0.22);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(124, 159, 74, 0.16), transparent 18rem),
+    rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.kiwi-card,
+.title-card,
+.achievement-card,
+.letter-card {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.kiwi-card:hover,
+.title-card:hover,
+.achievement-card:hover,
+.letter-card:hover {
+  transform: translateY(-2px);
+}
+
+.kiwi-card.is-selected,
+.title-card.is-equipped {
+  border-color: rgba(124, 159, 74, 0.5);
+  background:
+    radial-gradient(circle at top left, rgba(124, 159, 74, 0.14), transparent 12rem),
+    rgba(255, 255, 255, 0.86);
+  box-shadow: 0 16px 34px rgba(85, 122, 44, 0.14);
+}
+
+.kiwi-card.is-locked,
+.title-card.is-locked,
+.achievement-card.is-locked,
+.letter-card.is-locked {
+  opacity: 0.55;
+  filter: grayscale(0.35);
+}
+
+.kiwi-card h3,
+.title-card h4,
+.achievement-card h4,
+.letter-card h4 {
+  letter-spacing: -0.02em;
+}
+
+.selected-badge {
+  background: rgba(124, 159, 74, 0.16);
+  color: var(--accent-strong);
+}
+
+.muted-badge {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--muted);
+}
