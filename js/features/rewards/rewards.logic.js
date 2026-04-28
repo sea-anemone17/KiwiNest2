@@ -91,3 +91,28 @@ export function createKiwiMetaMessage(kiwiName, reward, analysis) {
 
   return `${kiwiName}가 기록지를 둥지에 넣었어요.\n“오늘의 공부 방식을 같이 관찰했어요.”`;
 }
+
+export function calculateCalmReward({ note, mood }) {
+  const noteLength = String(note ?? "").trim().length;
+
+  let exp = 4;
+  let affection = 2;
+  let titleTickets = 0;
+
+  if (noteLength >= 10) {
+    exp += 3;
+    affection += 1;
+  }
+
+  if (noteLength >= 50) {
+    exp += 5;
+    affection += 2;
+  }
+
+  if (["anxious", "guilty", "tired", "dopamine_low"].includes(mood)) {
+    exp += 3;
+    affection += 1;
+  }
+
+  return { exp, affection, titleTickets };
+}
