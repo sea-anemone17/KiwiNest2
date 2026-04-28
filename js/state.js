@@ -2,7 +2,7 @@ import { readStorage, writeStorage } from "./utils/storage.js";
 import { createId } from "./utils/id.js";
 import { getTodayKey } from "./utils/date.js";
 
-const STORAGE_KEY = "alpha-state-v1";
+const STORAGE_KEY = "kiwinest-alpha-state-v1";
 
 const DEFAULT_STATE = {
   schemaVersion: 1,
@@ -13,7 +13,7 @@ const DEFAULT_STATE = {
     titleTickets: 0,
   },
   diaries: [],
-  lastMessage: "둥지에 온 걸 환영해요. 오늘은 무엇을 가르쳐 줄 건가요?",
+  lastMessage: "둥지에 온 걸 환영해요.\n오늘은 무엇을 가르쳐 줄 건가요?",
 };
 
 export let appState = createDefaultState();
@@ -41,7 +41,7 @@ export function resetState() {
 export function setKiwiName(name) {
   const cleaned = String(name ?? "").trim().slice(0, 16);
   appState.kiwi.name = cleaned || "위키";
-  appState.lastMessage = `${appState.kiwi.name}가 자기 이름을 기억했어요. 🥝`;
+  appState.lastMessage = `${appState.kiwi.name}가 자기 이름을 기억했어요.\n작은 발로 둥지를 톡톡 두드려요.`;
   saveState();
 }
 
@@ -85,7 +85,6 @@ function migrateState(saved) {
   };
   next.diaries = Array.isArray(saved.diaries) ? saved.diaries : [];
   next.lastMessage = typeof saved.lastMessage === "string" ? saved.lastMessage : next.lastMessage;
-
   return next;
 }
 

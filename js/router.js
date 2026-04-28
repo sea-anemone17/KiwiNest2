@@ -11,9 +11,7 @@ export function initRouter(onRouteChange) {
       buttons.forEach((item) => item.classList.toggle("is-active", item === button));
       panels.forEach((panel) => panel.classList.toggle("is-active", panel.id === targetId));
 
-      if (typeof onRouteChange === "function") {
-        onRouteChange(targetId);
-      }
+      if (typeof onRouteChange === "function") onRouteChange(targetId);
     });
   });
 }
