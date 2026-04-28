@@ -102,6 +102,7 @@ function collectMetaInput() {
 
   return {
     goal: String(qs("#metaGoal")?.value ?? "").trim(),
+    studyType: qs("#metaStudyType")?.value ?? "concept",
     goalMinutes: Number(qs("#metaGoalMinutes")?.value ?? 0),
     actualMinutes,
     expectedDifficulty: Number(qs("#metaExpectedDifficulty")?.value ?? 3),
@@ -109,6 +110,7 @@ function collectMetaInput() {
     expectedFocus: Number(qs("#metaExpectedFocus")?.value ?? 3),
     actualFocus: Number(qs("#metaActualFocus")?.value ?? 3),
     completedGoal: qs("#metaCompletedGoal")?.value === "true",
+    blockReason: qs("#metaBlockReason")?.value ?? "",
     reflection: String(qs("#metaReflection")?.value ?? "").trim(),
   };
 }
