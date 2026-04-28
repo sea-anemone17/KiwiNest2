@@ -5,15 +5,59 @@
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  padding: 24px;
 }
-.card + .card { margin-top: 18px; }
-.card-title { margin: 0 0 10px; font-size: 1.25rem; }
-.muted { color: var(--muted); }
-.form-grid { display: grid; gap: 14px; }
-.field { display: grid; gap: 7px; }
-.label { font-weight: 800; }
-.input, .textarea, .select { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-md); background: #fffefb; padding: 12px 14px; color: var(--text); outline: none; }
-.input:focus, .textarea:focus, .select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(124, 159, 74, 0.16); }
+
+.card + .card {
+  margin-top: 18px;
+}
+
+.card-title {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.form-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.label {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.82);
+  padding: 13px 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: rgba(124, 159, 74, 0.65);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 0 0 4px rgba(124, 159, 74, 0.14);
+}
+
 .button {
   border: 0;
   border-radius: 999px;
@@ -22,16 +66,85 @@
   color: white;
   font-weight: 700;
   box-shadow: 0 10px 24px rgba(85, 122, 44, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
 .button:hover {
   transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(85, 122, 44, 0.24);
 }
-.button.secondary { background: #e9dfc0; color: var(--text); }
-.button-row { display: flex; gap: 10px; flex-wrap: wrap; }
-.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.stat { border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface-strong); padding: 14px; }
-.stat b { display: block; font-size: 1.35rem; }
-.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; max-width: min(520px, calc(100% - 32px)); padding: 12px 16px; border-radius: 999px; background: #2d2a22; color: white; transition: 0.2s ease; }
-.toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
-.empty { border: 1px dashed var(--line); border-radius: var(--radius-md); padding: 18px; color: var(--muted); background: rgba(255, 255, 255, 0.45); }
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button.secondary {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 11px;
+}
+
+.stat {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.68);
+  padding: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.035);
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.stat b {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  max-width: min(520px, calc(100% - 32px));
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: rgba(29, 29, 31, 0.9);
+  color: white;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: 0.2s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.empty {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.48);
+}
