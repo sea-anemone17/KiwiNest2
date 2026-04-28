@@ -1,6 +1,48 @@
-.kiwi-stage { display: grid; place-items: center; min-height: 260px; border-radius: var(--radius-lg); background: linear-gradient(180deg, #fff8da, #f3e7bd); border: 1px solid var(--line); }
-.kiwi-bird { font-size: 5rem; line-height: 1; filter: drop-shadow(0 12px 15px rgba(88, 72, 35, 0.2)); }
-.kiwi-message { margin-top: 12px; white-space: pre-line; color: var(--muted); text-align: center; }
-.recent-list { display: grid; gap: 10px; margin-top: 12px; }
-.recent-item { border: 1px solid var(--line); border-radius: var(--radius-md); padding: 14px; background: #fffefb; }
-.recent-item h4 { margin: 0 0 6px; }
+.kiwi-stage {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(124, 159, 74, 0.14), transparent 14rem),
+    rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.kiwi-bird {
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.12));
+}
+
+.kiwi-message {
+  margin-top: 12px;
+  white-space: pre-line;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.65;
+}
+
+.recent-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.recent-item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.recent-item h4 {
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
