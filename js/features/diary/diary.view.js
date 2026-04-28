@@ -13,7 +13,9 @@ export function renderDiary() {
         <label class="field">
           <span class="label">과목</span>
           <select class="select" id="diarySubject">
-            ${SUBJECTS.map((subject) => `<option value="${escapeHTML(subject.id)}">${escapeHTML(subject.name)}</option>`).join("")}
+            ${getAllSubjects(appState.customSubjects)
+             .map((subject) => `<option value="${escapeHTML(subject.id)}">${escapeHTML(subject.name)}</option>`)
+             .join("")}
           </select>
         </label>
 
