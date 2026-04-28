@@ -13,6 +13,8 @@ import { renderReview } from "./features/review/review.view.js";
 import { bindReviewEvents } from "./features/review/review.controller.js";
 import { renderKiwiDex } from "./features/kiwi/kiwi.view.js";
 import { bindKiwiEvents } from "./features/kiwi/kiwi.controller.js";
+import { renderSettings } from "./features/settings/settings.view.js";
+import { bindSettingsEvents } from "./features/settings/settings.controller.js";
 
 function renderApp() {
   setHTML(qs("#home"), renderHome());
@@ -21,6 +23,7 @@ function renderApp() {
   setHTML(qs("#calm"), renderCalm());
   setHTML(qs("#review"), renderReview());
   setHTML(qs("#kiwi"), renderKiwiDex());
+setHTML(qs("#settings"), renderSettings());
 
   bindHomeEvents(renderApp);
   bindDiaryEvents(renderApp);
@@ -28,6 +31,7 @@ function renderApp() {
   bindCalmEvents(renderApp);
   bindReviewEvents(renderApp);
   bindKiwiEvents(renderApp);
+bindSettingsEvents(renderApp);
 }
 
 function initApp() {

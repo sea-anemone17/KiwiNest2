@@ -425,6 +425,17 @@ function ensureLetterState() {
   appState.letters = normalizeLetterState(appState.letters);
 }
 
+export function exportStateSnapshot() {
+  return structuredCloneSafe(appState);
+}
+
+export function replaceStateFromSnapshot(snapshot) {
+  appState = migrateState(snapshot);
+  syncProgressUnlocks({ announce: false });
+  saveState();
+  return appState;
+}
+
 function structuredCloneSafe(value) {
   if (typeof structuredClone === "function") return structuredClone(value);
   return JSON.parse(JSON.stringify(value));
