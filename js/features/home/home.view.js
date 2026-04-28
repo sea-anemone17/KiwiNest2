@@ -4,6 +4,7 @@ import {
   getRecentDiaries,
   getRecentMetaSessions,
   getReviewStats,
+  getSelectedKiwiVariant,
   getTodayCalmLogCount,
   getTodayDiaryCount,
   getTodayMetaSessionCount,
@@ -13,6 +14,8 @@ import { formatDateTime } from "../../utils/date.js";
 import { getSubjectName } from "../../data/subjects.js";
 import { getMoodEmoji, getMoodName } from "../../data/moods.js";
 import { getSituationEmoji, getSituationName } from "../../data/situations.js";
+import { KIWI_VARIANTS } from "../../data/kiwiVariants.js";
+import { getKiwiDisplayName } from "../kiwi/kiwi.naming.js";
 
 export function renderHome() {
   const recentDiaries = getRecentDiaries(3);
@@ -20,17 +23,21 @@ export function renderHome() {
   const recentCalmLogs = getRecentCalmLogs(2);
   const reviewStats = getReviewStats();
   const kiwi = appState.kiwi;
+  const selectedVariant = getSelectedKiwiVariant();
+  const selectedKiwiName = getKiwiDisplayName(selectedVariant, kiwi.name);
   const todayRecordCount = getTodayDiaryCount() + getTodayMetaSessionCount() + getTodayCalmLogCount();
+  const unlockedCount = appState.kiwiDex?.unlockedVariantIds?.length ?? 1;
 
   return `
     <div class="page-grid">
       <section class="card">
-        <h2 class="card-title">${escapeHTML(kiwi.name)}의 둥지</h2>
-        <p class="muted">공부를 설명으로 바꾸고, 메타인지·회복·복습 기록으로 공부 방식을 관찰하면 ${escapeHTML(kiwi.name)}가 조금씩 강해져요.</p>
+        <h2 class="card-title">${escapeHTML(selectedKiwiName)}의 둥지</h2>
+        <p class="muted">공부를 설명으로 바꾸고, 메타인지·회복·복습 기록으로 공부 방식을 관찰하면 ${escapeHTML(kiwi.name)}의 다양한 모습이 해금돼요.</p>
 
         <div class="kiwi-stage" aria-label="키위새">
           <div>
-            <div class="kiwi-bird">•ө•</div>
+            <div class="kiwi-bird">${escapeHTML(selectedVariant.emoji)}<span class="kiwi-face">•ө•</span></div>
+            <p class="kiwi-variant-name">${escapeHTML(selectedKiwiName)}</p>
             <p class="kiwi-message">${escapeHTML(appState.lastMessage)}</p>
           </div>
         </div>
@@ -44,7 +51,7 @@ export function renderHome() {
           <div class="stat"><span>칭호 티켓</span><b>${kiwi.titleTickets}</b></div>
           <div class="stat"><span>오늘 기록</span><b>${todayRecordCount}</b></div>
           <div class="stat"><span>오늘 복습</span><b>${reviewStats.due}</b></div>
-          <div class="stat"><span>완료 복습</span><b>${reviewStats.mastered}</b></div>
+          <div class="stat"><span>키위 도감</span><b>${unlockedCount}/${KIWI_VARIANTS.length}</b></div>
         </div>
 
         <form id="kiwiNameForm" class="form-grid" style="margin-top: 18px;">
@@ -56,6 +63,8 @@ export function renderHome() {
         </form>
       </aside>
     </div>
+
+    ${renderNewKiwiNotice()}
 
     <section class="card">
       <h3 class="card-title">복습 둥지 상태</h3>
@@ -75,6 +84,22 @@ export function renderHome() {
     <section class="card">
       <h3 class="card-title">최근 마음 상태</h3>
       ${renderRecentCalmList(recentCalmLogs)}
+    </section>
+  `;
+}
+
+function renderNewKiwiNotice() {
+  const newlyUnlocked = appState.kiwiDex?.newlyUnlockedIds ?? [];
+  if (!newlyUnlocked.length) return "";
+
+  const variant = KIWI_VARIANTS.find((item) => item.id === newlyUnlocked[0]);
+  if (!variant) return "";
+
+  return `
+    <section class="card new-kiwi-notice">
+      <h3 class="card-title">${escapeHTML(variant.emoji)} 새 키위 발견!</h3>
+      <p><b>${escapeHTML(getKiwiDisplayName(variant, appState.kiwi.name))}</b>가 둥지에 찾아왔어요.</p>
+      <p class="muted">키위 도감 탭에서 대표 키위로 설정할 수 있어요.</p>
     </section>
   `;
 }
