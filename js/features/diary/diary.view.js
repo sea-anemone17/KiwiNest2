@@ -19,6 +19,25 @@ export function renderDiary() {
           </select>
         </label>
 
+        <div class="field">
+          <span class="label">새 과목 추가</span>
+          <div class="button-row">
+            <input
+              class="input"
+              id="newSubjectInput"
+              maxlength="20"
+              placeholder="예: 생명과학, 문학, 코딩"
+            />
+            <button
+              class="button secondary"
+              type="button"
+              id="addSubjectButton"
+            >
+              추가
+            </button>
+          </div>
+        </div>
+
         <label class="field">
           <span class="label">공부 제목</span>
           <input class="input" id="diaryTitle" placeholder="예: 관계대명사 whose 정리" />
@@ -75,7 +94,7 @@ function renderDiaryItem(diary) {
     <article class="diary-item">
       <h3>${escapeHTML(diary.title)}</h3>
       <div class="diary-meta">
-        <span>${escapeHTML(getSubjectName(diary.subject))}</span>
+        <span>${escapeHTML(getSubjectName(diary.subject, appState.customSubjects))}</span>
         <span>이해도 ${escapeHTML(diary.understanding)}</span>
         <span>${escapeHTML(formatDateTime(diary.createdAt))}</span>
       </div>
