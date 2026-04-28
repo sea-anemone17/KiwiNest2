@@ -75,11 +75,16 @@ function renderCalmLogItem(log) {
     <article class="calm-item">
       <div class="calm-item-head">
         <h3>${escapeHTML(getSituationEmoji(log.situation))} ${escapeHTML(getSituationName(log.situation))}</h3>
-        <span class="calm-mood-pill">${escapeHTML(getMoodEmoji(log.mood))} ${escapeHTML(getMoodName(log.mood))}</span>
+        <span class="calm-mood-pill">
+          ${escapeHTML(getMoodEmoji(log.mood ?? log.moods?.[0] ?? ""))}
+          ${escapeHTML(getMoodName(log.mood ?? log.moods?.[0] ?? ""))}
+        </span>
       </div>
       <p class="muted">${escapeHTML(formatDateTime(log.createdAt))}</p>
       ${log.note ? `<p>${escapeHTML(log.note)}</p>` : ""}
-      <div class="calm-message-box">${escapeHTML(log.message)}</div>
+      <div class="calm-message-box">
+       ${escapeHTML(log.kiwiMessage ?? log.message ?? "키위가 조용히 곁에 앉아 있어요.")}
+      </div>
       <div class="reward-line">EXP +${reward.exp} · 친밀도 +${reward.affection}</div>
     </article>
   `;
