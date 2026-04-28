@@ -46,7 +46,13 @@ export function renderHome() {
 
         <div class="kiwi-stage" aria-label="키위새">
           <div>
-            <div class="kiwi-bird">${escapeHTML(selectedVariant.emoji)}<span class="kiwi-face">•ө•</span></div>
+            <div class="kiwi-bird">
+             <img
+              src="${escapeHTML(selectedVariant.image)}"
+              alt="${escapeHTML(selectedKiwiName)}"
+              class="home-kiwi-img"
+             />
+            </div>
             <p class="kiwi-variant-name">[${escapeHTML(equippedTitle.name)}] ${escapeHTML(selectedKiwiName)}</p>
             <p class="kiwi-message">${escapeHTML(appState.lastMessage)}</p>
           </div>
