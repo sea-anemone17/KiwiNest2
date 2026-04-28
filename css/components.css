@@ -14,7 +14,19 @@
 .label { font-weight: 800; }
 .input, .textarea, .select { width: 100%; border: 1px solid var(--line); border-radius: var(--radius-md); background: #fffefb; padding: 12px 14px; color: var(--text); outline: none; }
 .input:focus, .textarea:focus, .select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(124, 159, 74, 0.16); }
-.button { border: 0; border-radius: var(--radius-md); padding: 12px 16px; font-weight: 900; background: var(--accent-strong); color: white; }
+.button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(85, 122, 44, 0.22);
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
 .button.secondary { background: #e9dfc0; color: var(--text); }
 .button-row { display: flex; gap: 10px; flex-wrap: wrap; }
 .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
