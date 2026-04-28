@@ -1,15 +1,14 @@
-import { qs, showToast } from "../../utils/dom.js";
+import { qs, on, showToast } from "../../utils/dom.js";
 import { setKiwiName } from "../../state.js";
 
 export function bindHomeEvents(renderApp) {
-  qs("#saveKiwiNameButton")?.addEventListener("click", () => {
-    const input = qs("#kiwiNameInput");
-    setKiwiName(input?.value ?? "");
-    renderApp();
-    showToast("키위 이름을 저장했어요 🥝");
-  });
+  const form = qs("#kiwiNameForm");
+  const input = qs("#kiwiNameInput");
 
-  qs("#goDiaryButton")?.addEventListener("click", () => {
-    qs('[data-tab-target="diary"]')?.click();
+  on(form, "submit", (event) => {
+    event.preventDefault();
+    setKiwiName(input?.value ?? "위키");
+    showToast("키위 이름을 저장했어요 🥝");
+    renderApp();
   });
 }
