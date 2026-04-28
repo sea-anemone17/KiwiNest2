@@ -1,11 +1,12 @@
 import { readStorage, writeStorage } from "./utils/storage.js";
 import { createId } from "./utils/id.js";
 import { getTodayKey } from "./utils/date.js";
+import { buildReviewItemFromDiary, completeReviewItem as completeReviewItemLogic } from "./features/review/review.logic.js";
 
 const STORAGE_KEY = "kiwinest-alpha-state-v1";
 
 const DEFAULT_STATE = {
-  schemaVersion: 3,
+  schemaVersion: 4,
   kiwi: {
     name: "위키",
     exp: 0,
@@ -15,6 +16,7 @@ const DEFAULT_STATE = {
   diaries: [],
   metaSessions: [],
   calmLogs: [],
+  reviewQueue: [],
   lastMessage: "둥지에 온 걸 환영해요.\n오늘은 무엇을 가르쳐 줄 건가요?",
 };
 
@@ -91,6 +93,25 @@ export function addCalmLog(log) {
   return fullLog;
 }
 
+export function addReviewItemFromDiary(diary) {
+  const reviewItem = buildReviewItemFromDiary(diary);
+  if (!reviewItem) return null;
+
+  appState.reviewQueue.unshift(reviewItem);
+  saveState();
+  return reviewItem;
+}
+
+export function completeReviewItem(reviewId, result) {
+  const index = appState.reviewQueue.findIndex((item) => item.id === reviewId);
+  if (index < 0) return null;
+
+  const updated = completeReviewItemLogic(appState.reviewQueue[index], result);
+  appState.reviewQueue[index] = updated;
+  saveState();
+  return updated;
+}
+
 export function getRecentDiaries(limit = 3) {
   return appState.diaries.slice(0, limit);
 }
@@ -101,6 +122,33 @@ export function getRecentMetaSessions(limit = 3) {
 
 export function getRecentCalmLogs(limit = 3) {
   return appState.calmLogs.slice(0, limit);
+}
+
+export function getReviewItems() {
+  return appState.reviewQueue;
+}
+
+export function getDueReviewItems() {
+  const today = getTodayKey();
+  return appState.reviewQueue.filter((item) => item.status !== "mastered" && getTodayKey(item.nextReviewAt) <= today);
+}
+
+export function getUpcomingReviewItems() {
+  const today = getTodayKey();
+  return appState.reviewQueue.filter((item) => item.status !== "mastered" && getTodayKey(item.nextReviewAt) > today);
+}
+
+export function getMasteredReviewItems() {
+  return appState.reviewQueue.filter((item) => item.status === "mastered");
+}
+
+export function getReviewStats() {
+  const due = getDueReviewItems().length;
+  const upcoming = getUpcomingReviewItems().length;
+  const mastered = getMasteredReviewItems().length;
+  const total = appState.reviewQueue.length;
+
+  return { due, upcoming, mastered, total };
 }
 
 export function getTodayDiaryCount() {
@@ -122,7 +170,7 @@ function migrateState(saved) {
   if (!saved || typeof saved !== "object") return createDefaultState();
 
   const next = createDefaultState();
-  next.schemaVersion = 3;
+  next.schemaVersion = 4;
   next.kiwi = {
     ...next.kiwi,
     ...(saved.kiwi && typeof saved.kiwi === "object" ? saved.kiwi : {}),
@@ -130,6 +178,7 @@ function migrateState(saved) {
   next.diaries = Array.isArray(saved.diaries) ? saved.diaries : [];
   next.metaSessions = Array.isArray(saved.metaSessions) ? saved.metaSessions : [];
   next.calmLogs = Array.isArray(saved.calmLogs) ? saved.calmLogs : [];
+  next.reviewQueue = Array.isArray(saved.reviewQueue) ? saved.reviewQueue : [];
   next.lastMessage = typeof saved.lastMessage === "string" ? saved.lastMessage : next.lastMessage;
   return next;
 }

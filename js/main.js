@@ -9,17 +9,21 @@ import { renderMeta } from "./features/meta/meta.view.js";
 import { bindMetaEvents } from "./features/meta/meta.controller.js";
 import { renderCalm } from "./features/calm/calm.view.js";
 import { bindCalmEvents } from "./features/calm/calm.controller.js";
+import { renderReview } from "./features/review/review.view.js";
+import { bindReviewEvents } from "./features/review/review.controller.js";
 
 function renderApp() {
   setHTML(qs("#home"), renderHome());
   setHTML(qs("#diary"), renderDiary());
   setHTML(qs("#meta"), renderMeta());
   setHTML(qs("#calm"), renderCalm());
+  setHTML(qs("#review"), renderReview());
 
   bindHomeEvents(renderApp);
   bindDiaryEvents(renderApp);
   bindMetaEvents(renderApp);
   bindCalmEvents(renderApp);
+  bindReviewEvents(renderApp);
 }
 
 function initApp() {
