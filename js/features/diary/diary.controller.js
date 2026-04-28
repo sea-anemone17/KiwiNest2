@@ -1,9 +1,29 @@
 import { qs, on, showToast } from "../../utils/dom.js";
-import { addDiary, addReviewItemFromDiary, appState, applyReward } from "../../state.js";
+import {
+  addCustomSubject,
+  addDiary,
+  addReviewItemFromDiary,
+  appState,
+  applyReward,
+} from "../../state.js";
 import { buildDiaryPayload, validateDiaryInput } from "./diary.logic.js";
 
 export function bindDiaryEvents(renderApp) {
   const form = qs("#diaryForm");
+  const addSubjectButton = qs("#addSubjectButton");
+
+  on(addSubjectButton, "click", () => {
+    const input = qs("#newSubjectInput");
+    const subject = addCustomSubject(input?.value ?? "");
+
+    if (!subject) {
+      showToast("추가할 과목 이름을 입력해 주세요.");
+      return;
+    }
+
+    showToast(`${subject.name} 과목이 추가되었어요.`);
+    renderApp();
+  });
 
   on(form, "submit", (event) => {
     event.preventDefault();
@@ -21,7 +41,12 @@ export function bindDiaryEvents(renderApp) {
     const reviewItem = shouldCreateReview(input) ? addReviewItemFromDiary(savedDiary) : null;
     applyReward(reward);
 
-    showToast(reviewItem ? `공부 일기를 저장하고 복습 둥지에 넣었어요. EXP +${reward.exp} 🪺` : `공부 일기를 저장했어요. EXP +${reward.exp} 🥝`);
+    showToast(
+      reviewItem
+        ? `공부 일기를 저장하고 복습 둥지에 넣었어요. EXP +${reward.exp} 🪺`
+        : `공부 일기를 저장했어요. EXP +${reward.exp} 🥝`
+    );
+
     renderApp();
   });
 }
