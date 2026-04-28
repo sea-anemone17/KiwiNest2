@@ -10,34 +10,29 @@
     <link rel="stylesheet" href="./css/nest.css" />
     <link rel="stylesheet" href="./css/diary.css" />
     <link rel="stylesheet" href="./css/mobile.css" />
+    <script type="module" src="./js/main.js"></script>
   </head>
   <body>
     <div class="app-shell">
-      <aside class="sidebar" aria-label="KiwiNest navigation">
-        <div class="brand">
-          <div class="brand-mark" aria-hidden="true">🥝</div>
-          <div>
-            <h1>KiwiNest</h1>
-            <p>2.0 Alpha</p>
-          </div>
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">KiwiNest 2.0 Alpha</p>
+          <h1>🥝 KiwiNest</h1>
+          <p class="subtitle">공부하고, 설명하고, 키위가 고마워하는 첫 번째 둥지예요.</p>
         </div>
+      </header>
 
-        <nav class="tab-nav" aria-label="주요 탭">
-          <button class="tab-button is-active" data-tab-target="home" type="button">둥지 홈</button>
-          <button class="tab-button" data-tab-target="diary" type="button">공부 일기장</button>
-        </nav>
+      <nav class="tab-nav" aria-label="주요 탭">
+        <button class="tab-button is-active" type="button" data-tab-target="home">둥지 홈</button>
+        <button class="tab-button" type="button" data-tab-target="diary">공부 일기장</button>
+      </nav>
 
-        <p class="sidebar-note">공부하고, 설명하고, 키위가 고마워하는 첫 번째 루프예요.</p>
-      </aside>
-
-      <main class="main-area">
-        <section id="home" class="tab-panel is-active" aria-labelledby="home-title"></section>
-        <section id="diary" class="tab-panel" aria-labelledby="diary-title"></section>
+      <main class="tab-container">
+        <section id="home" class="tab-panel is-active" aria-label="둥지 홈"></section>
+        <section id="diary" class="tab-panel" aria-label="공부 일기장"></section>
       </main>
     </div>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-    <script type="module" src="./js/main.js"></script>
   </body>
 </html>
