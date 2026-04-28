@@ -1,1 +1,69 @@
+.calm-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.7fr);
+  gap: 20px;
+  align-items: start;
+}
 
+.calm-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.calm-guide-card {
+  background: linear-gradient(180deg, #fff9e8, #f4ead0);
+}
+
+.calm-rule-list {
+  margin: 12px 0 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.calm-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.calm-item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  background: #fffefb;
+}
+
+.calm-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.calm-item h3 {
+  margin: 0;
+}
+
+.calm-mood-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #eee3c4;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.calm-message-box {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #fff8df;
+  color: var(--muted);
+  white-space: pre-line;
+}
