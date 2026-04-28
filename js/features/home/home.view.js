@@ -1,17 +1,24 @@
-import { appState, getRecentDiaries, getTodayDiaryCount } from "../../state.js";
+import {
+  appState,
+  getRecentDiaries,
+  getRecentMetaSessions,
+  getTodayDiaryCount,
+  getTodayMetaSessionCount,
+} from "../../state.js";
 import { escapeHTML } from "../../utils/sanitize.js";
 import { formatDateTime } from "../../utils/date.js";
 import { getSubjectName } from "../../data/subjects.js";
 
 export function renderHome() {
   const recentDiaries = getRecentDiaries(3);
+  const recentMetaSessions = getRecentMetaSessions(2);
   const kiwi = appState.kiwi;
 
   return `
     <div class="page-grid">
       <section class="card">
         <h2 class="card-title">${escapeHTML(kiwi.name)}의 둥지</h2>
-        <p class="muted">공부를 설명으로 바꾸면, ${escapeHTML(kiwi.name)}가 조금씩 강해져요.</p>
+        <p class="muted">공부를 설명으로 바꾸고, 메타인지로 공부 방식을 관찰하면 ${escapeHTML(kiwi.name)}가 조금씩 강해져요.</p>
 
         <div class="kiwi-stage" aria-label="키위새">
           <div>
@@ -27,7 +34,7 @@ export function renderHome() {
           <div class="stat"><span>EXP</span><b>${kiwi.exp}</b></div>
           <div class="stat"><span>친밀도</span><b>${kiwi.affection}</b></div>
           <div class="stat"><span>칭호 티켓</span><b>${kiwi.titleTickets}</b></div>
-          <div class="stat"><span>오늘 일기</span><b>${getTodayDiaryCount()}</b></div>
+          <div class="stat"><span>오늘 기록</span><b>${getTodayDiaryCount() + getTodayMetaSessionCount()}</b></div>
         </div>
 
         <form id="kiwiNameForm" class="form-grid" style="margin-top: 18px;">
@@ -42,12 +49,17 @@ export function renderHome() {
 
     <section class="card">
       <h3 class="card-title">최근 공부 일기</h3>
-      ${renderRecentList(recentDiaries)}
+      ${renderRecentDiaryList(recentDiaries)}
+    </section>
+
+    <section class="card">
+      <h3 class="card-title">최근 메타인지 기록</h3>
+      ${renderRecentMetaList(recentMetaSessions)}
     </section>
   `;
 }
 
-function renderRecentList(diaries) {
+function renderRecentDiaryList(diaries) {
   if (!diaries.length) {
     return `<div class="empty">아직 공부 일기가 없어요. 첫 설명을 ${escapeHTML(appState.kiwi.name)}에게 들려주세요.</div>`;
   }
@@ -58,6 +70,23 @@ function renderRecentList(diaries) {
         <article class="recent-item">
           <h4>${escapeHTML(diary.title)}</h4>
           <p class="muted">${escapeHTML(getSubjectName(diary.subject))} · ${escapeHTML(formatDateTime(diary.createdAt))}</p>
+        </article>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderRecentMetaList(sessions) {
+  if (!sessions.length) {
+    return `<div class="empty">아직 메타인지 기록이 없어요. 타이머로 첫 공부 실험을 해 보세요.</div>`;
+  }
+
+  return `
+    <div class="recent-list">
+      ${sessions.map((session) => `
+        <article class="recent-item">
+          <h4>${escapeHTML(session.goal)}</h4>
+          <p class="muted">${escapeHTML(formatDateTime(session.createdAt))} · 실제 ${Number(session.actualMinutes) || 0}분 · 집중 ${Number(session.actualFocus) || 0}/5</p>
         </article>
       `).join("")}
     </div>
