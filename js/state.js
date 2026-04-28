@@ -5,7 +5,7 @@ import { getTodayKey } from "./utils/date.js";
 const STORAGE_KEY = "kiwinest-alpha-state-v1";
 
 const DEFAULT_STATE = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   kiwi: {
     name: "위키",
     exp: 0,
@@ -14,6 +14,7 @@ const DEFAULT_STATE = {
   },
   diaries: [],
   metaSessions: [],
+  calmLogs: [],
   lastMessage: "둥지에 온 걸 환영해요.\n오늘은 무엇을 가르쳐 줄 건가요?",
 };
 
@@ -78,12 +79,28 @@ export function addMetaSession(session) {
   return fullSession;
 }
 
+export function addCalmLog(log) {
+  const fullLog = {
+    id: createId("calm"),
+    createdAt: new Date().toISOString(),
+    ...log,
+  };
+
+  appState.calmLogs.unshift(fullLog);
+  saveState();
+  return fullLog;
+}
+
 export function getRecentDiaries(limit = 3) {
   return appState.diaries.slice(0, limit);
 }
 
 export function getRecentMetaSessions(limit = 3) {
   return appState.metaSessions.slice(0, limit);
+}
+
+export function getRecentCalmLogs(limit = 3) {
+  return appState.calmLogs.slice(0, limit);
 }
 
 export function getTodayDiaryCount() {
@@ -96,17 +113,23 @@ export function getTodayMetaSessionCount() {
   return appState.metaSessions.filter((session) => getTodayKey(session.createdAt) === today).length;
 }
 
+export function getTodayCalmLogCount() {
+  const today = getTodayKey();
+  return appState.calmLogs.filter((log) => getTodayKey(log.createdAt) === today).length;
+}
+
 function migrateState(saved) {
   if (!saved || typeof saved !== "object") return createDefaultState();
 
   const next = createDefaultState();
-  next.schemaVersion = 2;
+  next.schemaVersion = 3;
   next.kiwi = {
     ...next.kiwi,
     ...(saved.kiwi && typeof saved.kiwi === "object" ? saved.kiwi : {}),
   };
   next.diaries = Array.isArray(saved.diaries) ? saved.diaries : [];
   next.metaSessions = Array.isArray(saved.metaSessions) ? saved.metaSessions : [];
+  next.calmLogs = Array.isArray(saved.calmLogs) ? saved.calmLogs : [];
   next.lastMessage = typeof saved.lastMessage === "string" ? saved.lastMessage : next.lastMessage;
   return next;
 }
