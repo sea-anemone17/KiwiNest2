@@ -63,3 +63,11 @@
   color: var(--accent-strong);
   background: rgba(124, 159, 74, 0.12);
 }
+
+.diary-trap-section {
+  border-top-color: rgba(175, 122, 34, 0.14);
+}
+
+.diary-trap-section b {
+  color: var(--accent-strong);
+}

@@ -46,3 +46,71 @@
   margin: 0 0 6px;
   letter-spacing: -0.02em;
 }
+
+.section-heading-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.section-heading-row .card-title,
+.section-heading-row .eyebrow {
+  margin-bottom: 4px;
+}
+
+.mission-caption {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mission-list {
+  display: grid;
+  gap: 12px;
+}
+
+.mission-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: var(--shadow-soft);
+}
+
+.mission-item.high {
+  background:
+    radial-gradient(circle at top left, rgba(124, 159, 74, 0.16), transparent 11rem),
+    rgba(255, 255, 255, 0.82);
+}
+
+.mission-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  background: rgba(124, 159, 74, 0.12);
+  font-size: 1.35rem;
+}
+
+.mission-body h4 {
+  margin: 0 0 4px;
+  letter-spacing: -0.02em;
+}
+
+.mission-body p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.mission-button {
+  white-space: nowrap;
+}

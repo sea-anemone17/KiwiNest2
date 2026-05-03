@@ -77,3 +77,21 @@
     gap: 18px;
   }
 }
+
+@media (max-width: 780px) {
+  .section-heading-row,
+  .mission-item {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mission-caption,
+  .mission-button {
+    white-space: normal;
+  }
+
+  .mission-icon {
+    align-self: flex-start;
+  }
+}

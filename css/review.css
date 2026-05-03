@@ -159,3 +159,28 @@
     min-width: 0;
   }
 }
+
+.review-trap {
+  padding: 13px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 236, 179, 0.34);
+  border: 1px solid rgba(175, 122, 34, 0.16);
+  margin: 12px 0 14px;
+}
+
+.review-trap.compact {
+  margin: 10px 0 0;
+}
+
+.review-trap b {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent-strong);
+}
+
+.review-trap p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
