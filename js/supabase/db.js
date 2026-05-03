@@ -130,7 +130,7 @@ function mapDiaries(userId, diaries = []) {
     focus_score: toNumberOrNull(diary.focusScore),
     situation: diary.situation ?? null,
     moods: Array.isArray(diary.moods) ? diary.moods : [],
-    needs_review: Boolean(diary.needsReview ?? diary.confusedPoint),
+    needs_review: Boolean(diary.needsReview ?? diary.confusedPoint ?? diary.trapPoint),
     reward: diary.reward ?? {},
   })).map(removeNullId);
 }
@@ -141,17 +141,17 @@ function mapMetaSessions(userId, sessions = []) {
     user_id: userId,
     created_at: session.createdAt ?? new Date().toISOString(),
     goal: session.goal ?? null,
-    session_type: session.sessionType ?? session.type ?? null,
+    session_type: session.studyType ?? session.sessionType ?? session.type ?? null,
     subject: session.subject ?? null,
-    target_minutes: toNumberOrNull(session.targetMinutes),
+    target_minutes: toNumberOrNull(session.goalMinutes ?? session.targetMinutes),
     actual_minutes: toNumberOrNull(session.actualMinutes),
     expected_difficulty: toNumberOrNull(session.expectedDifficulty),
     actual_difficulty: toNumberOrNull(session.actualDifficulty),
     expected_focus: toNumberOrNull(session.expectedFocus),
     actual_focus: toNumberOrNull(session.actualFocus),
-    achieved: Boolean(session.achieved),
+    achieved: Boolean(session.completedGoal ?? session.achieved),
     reflection: session.reflection ?? session.note ?? null,
-    reward: session.reward ?? {},
+    reward: packMetaReward(session),
   })).map(removeNullId);
 }
 
@@ -172,13 +172,13 @@ function mapReviewItems(userId, items = []) {
   return items.map((item) => ({
     id: safeUuidOrNull(item.id),
     user_id: userId,
-    source_diary_id: safeUuidOrNull(item.sourceDiaryId),
+    source_diary_id: safeUuidOrNull(item.sourceDiaryId ?? item.diaryId),
     created_at: item.createdAt ?? new Date().toISOString(),
     due_at: toDateOnly(item.nextReviewAt ?? item.dueAt ?? item.createdAt),
     subject: item.subject ?? null,
     title: item.title ?? null,
-    content: item.content ?? null,
-    confused_point: item.confusedPoint ?? null,
+    content: packReviewContent(item),
+    confused_point: item.confusedPoint ?? item.prompt ?? null,
     status: item.status ?? "pending",
     review_count: toNumberOrNull(item.reviewCount) ?? 0,
     last_result: item.lastResult ?? null,
@@ -228,21 +228,30 @@ function fromDiaryRow(row) {
 }
 
 function fromMetaRow(row) {
+  const reward = row.reward ?? {};
+  const metaExtras = reward._meta ?? {};
+
   return {
     id: row.id,
     createdAt: row.created_at,
     goal: row.goal,
+    studyType: row.session_type,
     sessionType: row.session_type,
     subject: row.subject,
+    goalMinutes: row.target_minutes,
     targetMinutes: row.target_minutes,
     actualMinutes: row.actual_minutes,
     expectedDifficulty: row.expected_difficulty,
     actualDifficulty: row.actual_difficulty,
     expectedFocus: row.expected_focus,
     actualFocus: row.actual_focus,
+    completedGoal: row.achieved,
     achieved: row.achieved,
+    blockReason: metaExtras.blockReason ?? "",
+    analysis: metaExtras.analysis ?? {},
+    nextStrategy: metaExtras.nextStrategy ?? "",
     reflection: row.reflection,
-    reward: row.reward ?? {},
+    reward: stripPackedMetaReward(reward),
   };
 }
 
@@ -259,21 +268,82 @@ function fromCalmRow(row) {
 }
 
 function fromReviewRow(row) {
+  const packed = unpackReviewContent(row.content);
+
   return {
     id: row.id,
     createdAt: row.created_at,
     sourceDiaryId: row.source_diary_id,
+    diaryId: row.source_diary_id,
     nextReviewAt: row.due_at,
     subject: row.subject,
     title: row.title,
-    content: row.content,
+    prompt: packed.prompt ?? row.confused_point ?? row.title,
+    originalExplanation: packed.originalExplanation ?? row.content ?? "",
     confusedPoint: row.confused_point,
+    trapPoint: packed.trapPoint ?? "",
+    understandingAtCreation: packed.understandingAtCreation ?? 0,
     status: row.status,
     reviewCount: row.review_count,
+    successCount: packed.successCount ?? inferSuccessCount(row.next_interval_days, row.status),
+    history: packed.history ?? [],
     lastResult: row.last_result,
     lastReviewedAt: row.last_reviewed_at,
     nextIntervalDays: row.next_interval_days,
   };
+}
+
+function packMetaReward(session) {
+  const reward = session.reward && typeof session.reward === "object" ? session.reward : {};
+  return {
+    ...reward,
+    _meta: {
+      blockReason: session.blockReason ?? "",
+      analysis: session.analysis ?? {},
+      nextStrategy: session.nextStrategy ?? "",
+    },
+  };
+}
+
+function stripPackedMetaReward(reward) {
+  if (!reward || typeof reward !== "object") return {};
+  const { _meta, ...publicReward } = reward;
+  return publicReward;
+}
+
+function packReviewContent(item) {
+  return JSON.stringify({
+    version: 1,
+    originalExplanation: item.originalExplanation ?? item.content ?? "",
+    prompt: item.prompt ?? item.confusedPoint ?? item.title ?? "복습하기",
+    trapPoint: item.trapPoint ?? "",
+    understandingAtCreation: item.understandingAtCreation ?? 0,
+    successCount: item.successCount ?? 0,
+    history: Array.isArray(item.history) ? item.history.slice(0, 20) : [],
+  });
+}
+
+function unpackReviewContent(content) {
+  if (!content) return {};
+
+  try {
+    const parsed = JSON.parse(content);
+    if (parsed && typeof parsed === "object" && parsed.version === 1) return parsed;
+  } catch {
+    // Older cloud rows stored the original explanation as plain text.
+  }
+
+  return { originalExplanation: content };
+}
+
+function inferSuccessCount(nextIntervalDays, status) {
+  if (status === "mastered") return 4;
+  const interval = Number(nextIntervalDays);
+  if (interval >= 30) return 4;
+  if (interval >= 14) return 3;
+  if (interval >= 7) return 2;
+  if (interval >= 3) return 1;
+  return 0;
 }
 
 function toNumberOrNull(value) {
