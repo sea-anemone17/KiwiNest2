@@ -1,6 +1,7 @@
 import { readStorage, writeStorage } from "./utils/storage.js";
 import { createId } from "./utils/id.js";
 import { getTodayKey } from "./utils/date.js";
+import { CURRENT_SCHEMA_VERSION, DEFAULT_STATE, STORAGE_KEY } from "./state/state.constants.js";
 import { buildReviewItemFromDiary, completeReviewItem as completeReviewItemLogic } from "./features/review/review.logic.js";
 import { evaluateKiwiUnlocks } from "./features/kiwi/kiwi.unlock.js";
 import { getKiwiVariantById } from "./data/kiwiVariants.js";
@@ -11,42 +12,6 @@ import { getLetterById } from "./data/letters.js";
 import { evaluateAchievements } from "./features/rewards/achievement.logic.js";
 import { evaluateLetters } from "./features/rewards/letters.logic.js";
 import { drawTitleFromGacha } from "./features/rewards/gacha.logic.js";
-
-const STORAGE_KEY = "kiwinest-alpha-state-v1";
-
-const DEFAULT_STATE = {
-  schemaVersion: 6,
-  kiwi: {
-    name: "위키",
-    exp: 0,
-    affection: 0,
-    titleTickets: 0,
-  },
-  kiwiDex: {
-    selectedVariantId: "basic",
-    unlockedVariantIds: ["basic"],
-    newlyUnlockedIds: [],
-  },
-  titles: {
-    equippedTitleId: "nest_beginner",
-    ownedTitleIds: ["nest_beginner"],
-    recentTitleIds: [],
-  },
-  achievements: {
-    unlockedIds: [],
-    recentIds: [],
-  },
-  letters: {
-    unlockedIds: [],
-    recentIds: [],
-  },
-  diaries: [],
-  metaSessions: [],
-  calmLogs: [],
-  reviewQueue: [],
-  customSubjects: [],
-  lastMessage: "둥지에 온 걸 환영해요.\n오늘은 무엇을 가르쳐 줄 건가요?",
-};
 
 export let appState = createDefaultState();
 
@@ -371,7 +336,7 @@ function migrateState(saved) {
   if (!saved || typeof saved !== "object") return createDefaultState();
 
   const next = createDefaultState();
-  next.schemaVersion = 6;
+  next.schemaVersion = CURRENT_SCHEMA_VERSION;
   next.kiwi = {
     ...next.kiwi,
     ...(saved.kiwi && typeof saved.kiwi === "object" ? saved.kiwi : {}),
@@ -380,13 +345,62 @@ function migrateState(saved) {
   next.titles = normalizeTitleState(saved.titles);
   next.achievements = normalizeAchievementState(saved.achievements);
   next.letters = normalizeLetterState(saved.letters);
-  next.diaries = Array.isArray(saved.diaries) ? saved.diaries : [];
-  next.metaSessions = Array.isArray(saved.metaSessions) ? saved.metaSessions : [];
+  next.diaries = Array.isArray(saved.diaries) ? saved.diaries.map(normalizeDiary) : [];
+  next.metaSessions = Array.isArray(saved.metaSessions) ? saved.metaSessions.map(normalizeMetaSession) : [];
   next.calmLogs = Array.isArray(saved.calmLogs) ? saved.calmLogs : [];
-  next.reviewQueue = Array.isArray(saved.reviewQueue) ? saved.reviewQueue : [];
+  next.reviewQueue = Array.isArray(saved.reviewQueue) ? saved.reviewQueue.map(normalizeReviewItem) : [];
   next.customSubjects = Array.isArray(saved.customSubjects) ? saved.customSubjects : [];
   next.lastMessage = typeof saved.lastMessage === "string" ? saved.lastMessage : next.lastMessage;
   return next;
+}
+
+function normalizeDiary(diary) {
+  if (!diary || typeof diary !== "object") return {};
+
+  return {
+    ...diary,
+    trapPoint: typeof diary.trapPoint === "string" ? diary.trapPoint : diary.examTrap ?? "",
+  };
+}
+
+function normalizeMetaSession(session) {
+  if (!session || typeof session !== "object") return {};
+
+  const reward = session.reward && typeof session.reward === "object" ? session.reward : {};
+  const metaExtras = reward._meta && typeof reward._meta === "object" ? reward._meta : {};
+
+  return {
+    ...session,
+    studyType: session.studyType ?? session.sessionType ?? "concept",
+    goalMinutes: Number(session.goalMinutes ?? session.targetMinutes ?? 0),
+    actualMinutes: Number(session.actualMinutes ?? 0),
+    completedGoal: Boolean(session.completedGoal ?? session.achieved),
+    blockReason: session.blockReason ?? metaExtras.blockReason ?? "",
+    analysis: session.analysis ?? metaExtras.analysis ?? {},
+    nextStrategy: session.nextStrategy ?? metaExtras.nextStrategy ?? "",
+    reward: stripPrivateMetaReward(reward),
+  };
+}
+
+function normalizeReviewItem(item) {
+  if (!item || typeof item !== "object") return {};
+
+  return {
+    ...item,
+    sourceDiaryId: item.sourceDiaryId ?? item.diaryId ?? null,
+    diaryId: item.diaryId ?? item.sourceDiaryId ?? null,
+    prompt: item.prompt ?? item.confusedPoint ?? item.title ?? "복습하기",
+    originalExplanation: item.originalExplanation ?? item.content ?? "",
+    trapPoint: item.trapPoint ?? item.examTrap ?? "",
+    successCount: Number(item.successCount ?? 0),
+    history: Array.isArray(item.history) ? item.history : [],
+  };
+}
+
+function stripPrivateMetaReward(reward) {
+  if (!reward || typeof reward !== "object") return {};
+  const { _meta, ...publicReward } = reward;
+  return publicReward;
 }
 
 function normalizeKiwiDex(kiwiDex) {
