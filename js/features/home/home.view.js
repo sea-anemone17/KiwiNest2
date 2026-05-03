@@ -21,6 +21,7 @@ import { KIWI_VARIANTS } from "../../data/kiwiVariants.js";
 import { ACHIEVEMENTS } from "../../data/achievements.js";
 import { LETTERS } from "../../data/letters.js";
 import { getKiwiDisplayName } from "../kiwi/kiwi.naming.js";
+import { buildTodayMissions } from "./home.service.js";
 
 export function renderHome() {
   const recentDiaries = getRecentDiaries(3);
@@ -37,6 +38,14 @@ export function renderHome() {
   const unlockedCount = appState.kiwiDex?.unlockedVariantIds?.length ?? 1;
   const achievementCount = appState.achievements?.unlockedIds?.length ?? 0;
   const letterCount = appState.letters?.unlockedIds?.length ?? 0;
+  const todayMissions = buildTodayMissions({
+    kiwiName: kiwi.name,
+    reviewStats,
+    todayDiaryCount: getTodayDiaryCount(),
+    todayMetaSessionCount: getTodayMetaSessionCount(),
+    todayCalmLogCount: getTodayCalmLogCount(),
+    recentDiaries,
+  });
 
   return `
     <div class="page-grid">
@@ -85,6 +94,17 @@ export function renderHome() {
     ${renderNewKiwiNotice()}
     ${renderRecentRewardNotice(recentAchievements, recentLetters)}
 
+    <section class="card today-mission-card">
+      <div class="section-heading-row">
+        <div>
+          <p class="eyebrow">Today Mission</p>
+          <h3 class="card-title">오늘의 키위 미션</h3>
+        </div>
+        <span class="mission-caption">작게 시작하기용 3개만 보여줘요</span>
+      </div>
+      ${renderTodayMissions(todayMissions)}
+    </section>
+
     <section class="card">
       <h3 class="card-title">복습 둥지 상태</h3>
       ${renderReviewSummary(reviewStats)}
@@ -104,6 +124,25 @@ export function renderHome() {
       <h3 class="card-title">최근 마음 상태</h3>
       ${renderRecentCalmList(recentCalmLogs)}
     </section>
+  `;
+}
+
+function renderTodayMissions(missions) {
+  return `
+    <div class="mission-list">
+      ${missions.map((mission) => `
+        <article class="mission-item ${escapeHTML(mission.priority)}">
+          <div class="mission-icon" aria-hidden="true">${escapeHTML(mission.icon)}</div>
+          <div class="mission-body">
+            <h4>${escapeHTML(mission.title)}</h4>
+            <p>${escapeHTML(mission.description)}</p>
+          </div>
+          <button class="button secondary mission-button" type="button" data-home-nav-target="${escapeHTML(mission.target)}">
+            ${escapeHTML(mission.actionLabel)}
+          </button>
+        </article>
+      `).join("")}
+    </div>
   `;
 }
 
