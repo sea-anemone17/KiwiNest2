@@ -58,10 +58,11 @@ function collectDiaryInput() {
     content: qs("#diaryContent")?.value ?? "",
     explanation: qs("#diaryExplanation")?.value ?? "",
     confusedPoint: qs("#diaryConfused")?.value ?? "",
+    trapPoint: qs("#diaryTrapPoint")?.value ?? "",
     understanding: qs("#diaryUnderstanding")?.value ?? "3",
   };
 }
 
 function shouldCreateReview(input) {
-  return String(input.confusedPoint ?? "").trim().length > 0 || Number(input.understanding) <= 2;
+  return String(input.confusedPoint ?? "").trim().length > 0 || String(input.trapPoint ?? "").trim().length > 0 || Number(input.understanding) <= 2;
 }

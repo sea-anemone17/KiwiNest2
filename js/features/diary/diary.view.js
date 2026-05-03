@@ -59,6 +59,11 @@ export function renderDiary() {
         </label>
 
         <label class="field">
+          <span class="label">시험 함정 포인트</span>
+          <textarea class="textarea" id="diaryTrapPoint" rows="3" placeholder="예: 선지에서 단어 하나를 바꿔서 틀리게 낼 수 있음 / 조건 누락 주의"></textarea>
+        </label>
+
+        <label class="field">
           <span class="label">이해도</span>
           <select class="select" id="diaryUnderstanding">
             <option value="1">1 · 아직 애매함</option>
@@ -113,6 +118,13 @@ function renderDiaryItem(diary) {
         <div class="diary-section">
           <b>헷갈린 점</b>
           <p>${escapeHTML(diary.confusedPoint)}</p>
+        </div>
+      ` : ""}
+
+      ${diary.trapPoint ? `
+        <div class="diary-section diary-trap-section">
+          <b>시험 함정 포인트</b>
+          <p>${escapeHTML(diary.trapPoint)}</p>
         </div>
       ` : ""}
 

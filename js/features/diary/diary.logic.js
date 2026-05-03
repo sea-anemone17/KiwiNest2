@@ -21,6 +21,7 @@ export function buildDiaryPayload(input, kiwiName) {
       content: input.content.trim(),
       explanation: input.explanation.trim(),
       confusedPoint: input.confusedPoint.trim(),
+      trapPoint: input.trapPoint.trim(),
       understanding: Number(input.understanding),
       reward,
     },
