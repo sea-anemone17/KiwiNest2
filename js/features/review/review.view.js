@@ -62,6 +62,8 @@ function renderDueItem(item) {
         <p>${escapeHTML(item.prompt)}</p>
       </div>
 
+      ${renderTrapPoint(item)}
+
       <details class="review-details">
         <summary>처음 설명 보기</summary>
         <p>${escapeHTML(item.originalExplanation)}</p>
@@ -73,6 +75,18 @@ function renderDueItem(item) {
         <button class="button ghost review-action" type="button" data-review-result="forgot">모름</button>
       </div>
     </article>
+  `;
+}
+
+function renderTrapPoint(item, compact = false) {
+  const trapPoint = String(item.trapPoint ?? "").trim();
+  if (!trapPoint) return "";
+
+  return `
+    <div class="review-trap${compact ? " compact" : ""}">
+      <b>시험 함정</b>
+      <p>${escapeHTML(trapPoint)}</p>
+    </div>
   `;
 }
 
@@ -91,6 +105,7 @@ function renderUpcomingList(items) {
         <span class="review-date">${escapeHTML(formatReviewDate(item.nextReviewAt))}</span>
       </div>
       <p class="muted">${escapeHTML(item.prompt)}</p>
+      ${renderTrapPoint(item, true)}
     </article>
   `).join("")}</div>`;
 }

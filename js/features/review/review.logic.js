@@ -6,23 +6,29 @@ const SUCCESS_INTERVAL_DAYS = [3, 7, 14, 30];
 export function buildReviewItemFromDiary(diary) {
   if (!diary) return null;
 
-  const prompt = diary.confusedPoint?.trim() || diary.title;
+  const confusedPoint = diary.confusedPoint?.trim() ?? "";
+  const trapPoint = diary.trapPoint?.trim() ?? "";
+  const prompt = confusedPoint || trapPoint || diary.title;
 
   return {
     id: createId("review"),
     diaryId: diary.id,
+    sourceDiaryId: diary.id,
     createdAt: new Date().toISOString(),
     subject: diary.subject,
     title: diary.title,
     prompt,
     originalExplanation: diary.explanation,
-    confusedPoint: diary.confusedPoint,
+    confusedPoint,
+    trapPoint,
     understandingAtCreation: Number(diary.understanding) || 0,
     nextReviewAt: new Date().toISOString(),
     lastReviewedAt: null,
     reviewCount: 0,
     successCount: 0,
     status: "pending",
+    lastResult: null,
+    nextIntervalDays: 1,
     history: [],
   };
 }
@@ -33,6 +39,7 @@ export function completeReviewItem(item, result) {
   const next = { ...item };
 
   next.reviewCount = Number(next.reviewCount || 0) + 1;
+  next.lastResult = reviewResult;
   next.lastReviewedAt = now.toISOString();
   next.history = Array.isArray(next.history) ? [...next.history] : [];
   next.history.unshift({
@@ -46,17 +53,21 @@ export function completeReviewItem(item, result) {
 
     if (successCount >= SUCCESS_INTERVAL_DAYS.length) {
       next.status = "mastered";
+      next.nextIntervalDays = 30;
       next.nextReviewAt = addDays(now, 30).toISOString();
     } else {
       next.status = "pending";
-      next.nextReviewAt = addDays(now, SUCCESS_INTERVAL_DAYS[successCount - 1]).toISOString();
+      next.nextIntervalDays = SUCCESS_INTERVAL_DAYS[successCount - 1];
+      next.nextReviewAt = addDays(now, next.nextIntervalDays).toISOString();
     }
   } else if (reviewResult === "shaky") {
     next.status = "pending";
+    next.nextIntervalDays = 1;
     next.nextReviewAt = addDays(now, 1).toISOString();
   } else {
     next.successCount = 0;
     next.status = "pending";
+    next.nextIntervalDays = 1;
     next.nextReviewAt = addDays(now, 1).toISOString();
   }
 
